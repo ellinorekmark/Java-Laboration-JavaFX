@@ -37,8 +37,9 @@ public class HelloController {
         onLinesMousePressedEvent = mouseEvent -> {
             context.setStroke(colorChoice.getValue());
             context.setLineWidth(Double.parseDouble(pixelSize.getValue()));
-            context.beginPath();
             context.setLineCap(StrokeLineCap.ROUND);
+            context.beginPath();
+
             context.moveTo(mouseEvent.getX(), mouseEvent.getY());
             context.stroke();
 
@@ -46,7 +47,7 @@ public class HelloController {
         onLinesMouseReleasedEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                context.moveTo(mouseEvent.getX(), mouseEvent.getY());
+                context.lineTo(mouseEvent.getX(), mouseEvent.getY());
                 context.stroke();
                 context.closePath();
                 //do stuff.
@@ -55,7 +56,7 @@ public class HelloController {
         onMouseDraggedEvent = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                context.moveTo(mouseEvent.getX(), mouseEvent.getY());
+                context.lineTo(mouseEvent.getX(), mouseEvent.getY());
                 context.stroke();
                 //do stuff.
             }
