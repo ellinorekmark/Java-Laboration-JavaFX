@@ -1,11 +1,14 @@
 package com.example.laborationtre;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import javafx.fxml.FXML;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
@@ -13,10 +16,12 @@ import javafx.scene.shape.StrokeLineCap;
 
 
 public class HelloController {
+
     public Canvas canvas;
     @FXML
     public Button undoButton;
     public Button redoButton;
+    public Button saveButton;
     public ColorPicker colorChoice;
 
     public static GraphicsContext context;
@@ -30,7 +35,11 @@ public class HelloController {
     public EventHandler<MouseEvent> onMouseDraggedEvent;
 
     public Slider pixelSlider;
+    public double px;
+    public Tools tool;
+
     public Label pixelSizeInfo;
+
 
 
     public void initialize() {
@@ -42,15 +51,33 @@ public class HelloController {
         toolsList.setValue("Free Draw");
 
 
+
+
+
+
+    }
+    @FXML
+    protected void setNewPixelSize(){
+        pixelSizeInfo.setText(Math.round(pixelSlider.getValue()) + " px");
+        px = pixelSlider.getValue();
+    }
+
+
+
+    @FXML
+    protected void onCanvasPress() {
+
+//        artMemory.add(new ArtObject(canvas));
+//        addContext(context);
         onLinesMousePressedEvent = (MouseEvent mouseEvent) -> {
-            if(toolsList.getValue().equalsIgnoreCase("Stamp - Square")){
+            if(tool.equals(Tools.SQUARESTAMP)){
                 context.setFill(colorChoice.getValue());
                 context.fillRect(mouseEvent.getX()-(pixelSlider.getValue()/2), mouseEvent.getY()-(pixelSlider.getValue()/2), pixelSlider.getValue(), pixelSlider.getValue());
             }
             else {
 
                 context.setStroke(colorChoice.getValue());
-                context.setLineWidth(pixelSlider.getValue());
+                context.setLineWidth(px);
                 context.setLineCap(StrokeLineCap.ROUND);
                 context.beginPath();
 
@@ -63,42 +90,68 @@ public class HelloController {
             context.lineTo(mouseEvent.getX(), mouseEvent.getY());
             context.stroke();
             context.closePath();
+
         };
         onMouseDraggedEvent = mouseEvent -> {
             context.lineTo(mouseEvent.getX(), mouseEvent.getY());
             context.stroke();
         };
 
-    }
-    @FXML
-    protected void setNewPixelSize(){
-        pixelSizeInfo.setText(Math.round(pixelSlider.getValue()) + " px");
-    }
 
 
-
-    @FXML
-    protected void onCanvasPress() {
-
-
-        if (toolsList.getValue().equalsIgnoreCase("lines")) {
+        if (tool.equals(Tools.LINES)) {
 
             canvas.removeEventHandler(MouseEvent.MOUSE_DRAGGED, onMouseDraggedEvent);
             canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, onLinesMousePressedEvent);
             canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, onLinesMouseReleasedEvent);
         }
-        else if (toolsList.getValue().equalsIgnoreCase("free draw")) {
+        else if (tool.equals(Tools.FREEDRAW)) {
             canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, onMouseDraggedEvent);
             canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, onLinesMousePressedEvent);
             canvas.removeEventHandler(MouseEvent.MOUSE_RELEASED, onLinesMouseReleasedEvent);
         }
-        else if (toolsList.getValue().equalsIgnoreCase("Stamp - Square")) {
+        else if (tool.equals(Tools.SQUARESTAMP)) {
             canvas.removeEventHandler(MouseEvent.MOUSE_DRAGGED, onMouseDraggedEvent);
             canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, onLinesMousePressedEvent);
             canvas.removeEventHandler(MouseEvent.MOUSE_RELEASED, onLinesMouseReleasedEvent);
         }
 
     }
+@FXML
+    void undoCanvas(ActionEvent event) {
+
+    }
+
+    public void toolChoiceMade() {
+        if (toolsList.getValue().equalsIgnoreCase("lines")){
+            tool = Tools.LINES;
+            System.out.println(tool);
+        } else if (toolsList.getValue().equalsIgnoreCase("free draw")) {
+            tool = Tools.FREEDRAW;
+            System.out.println(tool);
+        }
+        else if(toolsList.getValue().equalsIgnoreCase("Stamp - Square")){
+            tool = Tools.SQUARESTAMP;
+            System.out.println(tool);
+        }
+    }
+
+
+
+
+    enum Tools{
+        LINES,
+        FREEDRAW,
+        SQUARESTAMP
+    }
+
+
+
+
+
+
+
+
 
 }
 

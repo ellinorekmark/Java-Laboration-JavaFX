@@ -26,7 +26,7 @@
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
            </rowConstraints>
            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
+               <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" onAction="#undoCanvas"/>
                <Button fx:id="redoButton" mnemonicParsing="false" text="Redo" />
            </HBox>
            <HBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
@@ -36,7 +36,7 @@
            </HBox>
            <HBox alignment="CENTER" GridPane.columnIndex="3">
               <children>
-                  <Button mnemonicParsing="false" text="Save Image" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" text="Save Image" />
               </children>
            </HBox>
            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="77.0" />
@@ -49,7 +49,7 @@
                   <Insets />
               </opaqueInsets>
            </HBox>
-           <ChoiceBox fx:id="toolsList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+           <ChoiceBox fx:id="toolsList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#toolChoiceMade">
                <items>
                    <FXCollections fx:factory="observableArrayList">
                        <String fx:value="Lines" />

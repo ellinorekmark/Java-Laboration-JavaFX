@@ -1,32 +1,18 @@
 package com.example.laborationtre;
 
+
+import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class ArtObject {
 
-    MouseEvent mouseEvent;
-    //MouseEvent mouseDrag;
-   // MouseEvent mouseRelease;
-    Color colorChoice;
-    int pixelSize;
-    Tool toolchoice;
-
-    public ArtObject(MouseEvent event, Color colorChoice, int pixelSize, Tool toolchoice) {
-        this.mouseEvent = event;
-
-        this.colorChoice = colorChoice;
-        this.pixelSize = pixelSize;
-        this.toolchoice = toolchoice;
+    public ArtObject(Canvas savedCanvas) {
+        this.savedCanvas = savedCanvas;
     }
 
-
-}
-
-
-enum Tool{
-    LINE,
-    FREEDRAW,
+    Canvas savedCanvas;
 
 }

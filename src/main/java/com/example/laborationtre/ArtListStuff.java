@@ -1,18 +1,26 @@
-/*package com.example.laborationtre;
+package com.example.laborationtre;
+
+import com.example.laborationtre.ArtObject;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 
-import static com.example.laborationtre.HelloController.putArtOnCanvas;
+
 
 public class ArtListStuff {
 
     static public ArrayList<ArtObject> artMemory = new ArrayList<ArtObject>();
+    static public ArrayList<GraphicsContext> contextList = new ArrayList<GraphicsContext>();
+
+    public static void addContext(GraphicsContext context){
+        contextList.add(context);
+    }
 
 
 
     public static void addArtMemory(ArtObject art){
         artMemory.add(art);
-        putArtOnCanvas(art);
+
     }
 
     public static ArtObject getLastArtMemory(){
@@ -20,4 +28,4 @@ public class ArtListStuff {
     }
 
 
-}*/
+}
