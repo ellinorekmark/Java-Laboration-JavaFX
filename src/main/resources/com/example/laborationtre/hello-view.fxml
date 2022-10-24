@@ -13,83 +13,60 @@
     </padding>
    <HBox prefHeight="700.0" prefWidth="500.0" />
    <top>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="80.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.0" minWidth="10.0" prefWidth="168.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="125.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.0" minWidth="10.0" prefWidth="117.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <children>
-                  <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
-                  <Button fx:id="redoButton" mnemonicParsing="false" text="Redo" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
-               <children>
+       <GridPane BorderPane.alignment="CENTER">
+           <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="55.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.0" minWidth="10.0" prefWidth="199.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="125.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.0" minWidth="10.0" prefWidth="117.0" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
+               <Button fx:id="redoButton" mnemonicParsing="false" text="Redo" />
+           </HBox>
+           <HBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
+              <children>
                   <Button mnemonicParsing="false" text="Clear Image" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" GridPane.columnIndex="3">
-               <children>
+              </children>
+           </HBox>
+           <HBox alignment="CENTER" GridPane.columnIndex="3">
+              <children>
                   <Button mnemonicParsing="false" text="Save Image" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Let's Draw" textAlignment="CENTER" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
-               <children>
+              </children>
+           </HBox>
+           <HBox alignment="CENTER" prefHeight="30.0" prefWidth="77.0" />
+           <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
+              <children>
                   <Label text="Size " />
-               </children>
-               <opaqueInsets>
+               <Label fx:id="pixelSizeInfo" text="" />
+              </children>
+              <opaqueInsets>
                   <Insets />
-               </opaqueInsets>
-            </HBox>
-            <ChoiceBox fx:id="toolsList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" >
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Lines" />
-                        <String fx:value="Free Draw" />
-                        <String fx:value="etc" />
-                    </FXCollections>
-                </items>
-            </ChoiceBox>
-            <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <ChoiceBox fx:id="pixelSize" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" >
-<items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="4" />
-                    <String fx:value="8" />
-                    <String fx:value="12" />
-                    <String fx:value="16" />
-                    <String fx:value="20" />
-                    <String fx:value="24" />
-                    <String fx:value="28" />
-                    <String fx:value="32" />
-                    <String fx:value="36" />
-                    <String fx:value="40" />
-                    <String fx:value="44" />
-                    <String fx:value="48" />
-                </FXCollections>
-</items>
-            </ChoiceBox>
-            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
-               <children>
+              </opaqueInsets>
+           </HBox>
+           <ChoiceBox fx:id="toolsList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <items>
+                   <FXCollections fx:factory="observableArrayList">
+                       <String fx:value="Lines" />
+                       <String fx:value="Free Draw" />
+                       <String fx:value="Stamp - Square" />
+                   </FXCollections>
+               </items>
+           </ChoiceBox>
+           <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+           <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
+              <children>
                   <Label text="Tool" />
-               </children>
-            </HBox>
-         </children>
-      </GridPane>
+              </children>
+           </HBox>
+         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseReleased="#setNewPixelSize"/>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Let's Draw" textAlignment="CENTER" GridPane.columnIndex="1" />
+       </GridPane>
    </top>
    <center>
       <Canvas fx:id="canvas" height="500.0" onMouseClicked="#onCanvasPress" width="500.0" BorderPane.alignment="CENTER" />
