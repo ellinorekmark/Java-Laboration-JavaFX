@@ -26,49 +26,42 @@
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
            </rowConstraints>
            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" onAction="#undoCanvas"/>
-               <Button fx:id="redoButton" mnemonicParsing="false" text="Redo" />
+               <Button fx:id="undoButton" mnemonicParsing="false" onAction="#undoCanvas" text="Undo" />
+               <Button fx:id="redoButton" mnemonicParsing="false" onAction="#redoCanvas" text="Redo" />
            </HBox>
            <HBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
-              <children>
-                  <Button mnemonicParsing="false" text="Clear Image" />
-              </children>
+               <Button fx:id="clearButton" mnemonicParsing="false" text="Clear Image" onAction="#clearCanvas"/>
            </HBox>
            <HBox alignment="CENTER" GridPane.columnIndex="3">
-              <children>
-                  <Button fx:id="saveButton" mnemonicParsing="false" text="Save Image" />
-              </children>
+               <Button fx:id="saveButton" mnemonicParsing="false" text="Save Image"/>
            </HBox>
            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="77.0" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
-              <children>
-                  <Label text="Size " />
-               <Label fx:id="pixelSizeInfo" text="" />
-              </children>
-              <opaqueInsets>
-                  <Insets />
-              </opaqueInsets>
+               <opaqueInsets>
+                   <Insets/>
+               </opaqueInsets>
+               <Label text="Size "/>
+               <Label fx:id="pixelSizeInfo" />
            </HBox>
-           <ChoiceBox fx:id="toolsList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#toolChoiceMade">
+           <ChoiceBox fx:id="toolsList" onAction="#toolChoiceMade" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <items>
                    <FXCollections fx:factory="observableArrayList">
                        <String fx:value="Lines" />
                        <String fx:value="Free Draw" />
-                       <String fx:value="Stamp - Square" />
+                       <String fx:value="Circle" />
                    </FXCollections>
                </items>
            </ChoiceBox>
            <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
-              <children>
-                  <Label text="Tool" />
-              </children>
+               <Label text="Tool"/>
            </HBox>
-         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseReleased="#setNewPixelSize"/>
+         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0" onMouseReleased="#setNewPixelSize" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label alignment="CENTER" contentDisplay="CENTER" text="Let's Draw" textAlignment="CENTER" GridPane.columnIndex="1" />
+         <ToggleButton fx:id="selectTool" mnemonicParsing="false" text="Select" GridPane.columnIndex="2" GridPane.rowIndex="1" />
        </GridPane>
    </top>
    <center>
-      <Canvas fx:id="canvas" height="500.0" onMousePressed="#onCanvasPress" onMouseDragged="#onCanvasDrag" onMouseReleased="#onCanvasRelease" width="500.0" BorderPane.alignment="CENTER" />
+      <Canvas fx:id="canvas" height="500.0" onMouseDragged="#onCanvasDrag" onMousePressed="#onCanvasPress" onMouseReleased="#onCanvasRelease" width="500.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
