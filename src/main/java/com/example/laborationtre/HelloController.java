@@ -1,7 +1,7 @@
 package com.example.laborationtre;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 
 import javafx.fxml.FXML;
 
@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
+
 
 
 
@@ -28,11 +29,6 @@ public class HelloController {
     public ChoiceBox<String> toolsList;
 
 
-    public EventHandler<MouseEvent> onLinesMousePressedEvent;
-
-    public EventHandler<MouseEvent> onLinesMouseReleasedEvent;
-
-    public EventHandler<MouseEvent> onMouseDraggedEvent;
 
     public Slider pixelSlider;
     public double px;
@@ -52,9 +48,6 @@ public class HelloController {
 
 
 
-
-
-
     }
     @FXML
     protected void setNewPixelSize(){
@@ -65,56 +58,26 @@ public class HelloController {
 
 
     @FXML
-    protected void onCanvasPress() {
+    protected void onCanvasPress(MouseEvent mouseEvent) {
 
 //        artMemory.add(new ArtObject(canvas));
 //        addContext(context);
-        onLinesMousePressedEvent = (MouseEvent mouseEvent) -> {
-            if(tool.equals(Tools.SQUARESTAMP)){
-                context.setFill(colorChoice.getValue());
-                context.fillRect(mouseEvent.getX()-(pixelSlider.getValue()/2), mouseEvent.getY()-(pixelSlider.getValue()/2), pixelSlider.getValue(), pixelSlider.getValue());
-            }
-            else {
+        if(tool.equals(Tools.SQUARESTAMP)){
+            context.setFill(colorChoice.getValue());
+            context.fillRect(mouseEvent.getX()-(pixelSlider.getValue()/2), mouseEvent.getY()-(pixelSlider.getValue()/2), pixelSlider.getValue(), pixelSlider.getValue());
+        }
+        else {
 
-                context.setStroke(colorChoice.getValue());
-                context.setLineWidth(px);
-                context.setLineCap(StrokeLineCap.ROUND);
-                context.beginPath();
+            context.setStroke(colorChoice.getValue());
+            context.setLineWidth(px);
+            context.setLineCap(StrokeLineCap.ROUND);
+            context.beginPath();
 
-                context.moveTo(mouseEvent.getX(), mouseEvent.getY());
-                context.stroke();
-            }
-
-        };
-        onLinesMouseReleasedEvent = mouseEvent -> {
-            context.lineTo(mouseEvent.getX(), mouseEvent.getY());
+            context.moveTo(mouseEvent.getX(), mouseEvent.getY());
             context.stroke();
-            context.closePath();
-
-        };
-        onMouseDraggedEvent = mouseEvent -> {
-            context.lineTo(mouseEvent.getX(), mouseEvent.getY());
-            context.stroke();
-        };
-
-
-
-        if (tool.equals(Tools.LINES)) {
-
-            canvas.removeEventHandler(MouseEvent.MOUSE_DRAGGED, onMouseDraggedEvent);
-            canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, onLinesMousePressedEvent);
-            canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, onLinesMouseReleasedEvent);
         }
-        else if (tool.equals(Tools.FREEDRAW)) {
-            canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, onMouseDraggedEvent);
-            canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, onLinesMousePressedEvent);
-            canvas.removeEventHandler(MouseEvent.MOUSE_RELEASED, onLinesMouseReleasedEvent);
-        }
-        else if (tool.equals(Tools.SQUARESTAMP)) {
-            canvas.removeEventHandler(MouseEvent.MOUSE_DRAGGED, onMouseDraggedEvent);
-            canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, onLinesMousePressedEvent);
-            canvas.removeEventHandler(MouseEvent.MOUSE_RELEASED, onLinesMouseReleasedEvent);
-        }
+
+
 
     }
 @FXML
@@ -136,10 +99,25 @@ public class HelloController {
         }
     }
 
+    public void onCanvasDrag(MouseEvent mouseEvent) {
+        if(tool.equals(Tools.FREEDRAW)){
+        context.lineTo(mouseEvent.getX(), mouseEvent.getY());
+        context.stroke();
+        }
+    }
+
+    public void onCanvasRelease(MouseEvent mouseEvent) {
+        if(tool.equals(Tools.LINES) || tool.equals(Tools.FREEDRAW)){
+            context.lineTo(mouseEvent.getX(), mouseEvent.getY());
+            context.stroke();
+            context.closePath();
+        }
 
 
+    }
 
-    enum Tools{
+
+    public enum Tools{
         LINES,
         FREEDRAW,
         SQUARESTAMP

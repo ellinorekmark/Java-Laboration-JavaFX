@@ -1,6 +1,5 @@
 package com.example.laborationtre;
 
-import com.example.laborationtre.ArtObject;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 
 public class ArtListStuff {
 
-    static public ArrayList<ArtObject> artMemory = new ArrayList<ArtObject>();
+    static public ArrayList<BaseShape> artMemory = new ArrayList<BaseShape>();
     static public ArrayList<GraphicsContext> contextList = new ArrayList<GraphicsContext>();
 
     public static void addContext(GraphicsContext context){
@@ -18,12 +17,12 @@ public class ArtListStuff {
 
 
 
-    public static void addArtMemory(ArtObject art){
+    public static void addArtMemory(BaseShape art){
         artMemory.add(art);
 
     }
 
-    public static ArtObject getLastArtMemory(){
+    public static BaseShape getLastArtMemory(){
         return artMemory.get(artMemory.size());
     }
 
