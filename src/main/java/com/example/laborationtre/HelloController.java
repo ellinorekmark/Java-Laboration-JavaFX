@@ -1,6 +1,7 @@
 package com.example.laborationtre;
 
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.canvas.Canvas;
@@ -9,10 +10,11 @@ import javafx.scene.control.*;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 
+import static com.example.laborationtre.Line.*;
 import static com.example.laborationtre.ShapesModel.*;
+import static com.example.laborationtre.Square.*;
 
 
 public class HelloController {
@@ -28,14 +30,13 @@ public class HelloController {
     public static GraphicsContext context;
     public ChoiceBox<String> toolsList;
 
-
     public Slider pixelSlider;
-    public double px;
+
     public Tools tool;
 
 
     public Label pixelSizeInfo;
-    public ToggleButton selectTool;
+    public ToggleButton editTool;
 
 
     public void initialize() {
@@ -44,63 +45,77 @@ public class HelloController {
         colorChoice.setValue(Color.BLACK);
         pixelSizeInfo.setText(Math.round(pixelSlider.getValue()) + " px");
         toolsList.setValue("Circle");
+
     }
 
-    @FXML
-    protected void setNewPixelSize() {
-        pixelSizeInfo.setText(Math.round(pixelSlider.getValue()) + " px");
-        px = pixelSlider.getValue();
-    }
 
 
     @FXML
     protected void onCanvasPress(MouseEvent mouseEvent) {
 
-        if (selectTool.isSelected()) {
-            trySelectShape(mouseEvent);
+        if (editTool.isSelected()) {
+            tryEditShape(mouseEvent);
+
         } else {
             Shape newShape = null;
             if (tool.equals(Tools.CIRCLE)) {
                 newShape = new Circle(mouseEvent.getX() - (pixelSlider.getValue() / 2), mouseEvent.getY() - (pixelSlider.getValue() / 2), pixelSlider.getValue(), colorChoice.getValue());
+                addToStack(newShape);
+            } else if (tool.equals(Tools.SQUARE)) {
+                newShape = new Square(mouseEvent.getX() - (pixelSlider.getValue() / 2), mouseEvent.getY() - (pixelSlider.getValue() / 2), pixelSlider.getValue(), colorChoice.getValue());
+                addToStack(newShape);
+            } else if (tool.equals(Tools.LINE)) {
+                startX = mouseEvent.getX();
+                startY = mouseEvent.getY();
             }
-            shapeStack.add(newShape);
-            shapeUndoStack.clear();
-            updateCanvas();
+
         }
-
-
-//        if(tool.equals(Tools.SQUARESTAMP)){
-//            context.setFill(colorChoice.getValue());
-//            context.fillRect(mouseEvent.getX()-(pixelSlider.getValue()/2), mouseEvent.getY()-(pixelSlider.getValue()/2), pixelSlider.getValue(), pixelSlider.getValue());
-//        }
-//        else {
-//
-//            context.setStroke(colorChoice.getValue());
-//            context.setLineWidth(px);
-//            context.setLineCap(StrokeLineCap.ROUND);
-//            context.beginPath();
-//
-//            context.moveTo(mouseEvent.getX(), mouseEvent.getY());
-//            context.stroke();
+        updateCanvas();
     }
 
-    private void trySelectShape(MouseEvent mouseEvent) {
+
+
+    private void tryEditShape(MouseEvent mouseEvent) {
         for (int i = 0; i < shapeStack.size(); i++) {
             Shape shape = shapeStack.get(i);
+
             if (shape.getClass().equals(Circle.class)) {
                 Circle circleShape = (Circle) shape;
                 if (compareCircleAndMouseEvent(circleShape, mouseEvent)) {
                     editShape(shape, i);
                 }
+            } else if (shape.getClass().equals(Square.class)) {
+                Square squareShape = (Square) shape;
+                if (compareSquareAndMouseEvent(squareShape, mouseEvent)) {
+                    editShape(shape, i);
+                }
+            } else if (shape.getClass().equals(Line.class)) {
+                Line lineShape = (Line) shape;
+                if (compareLineAndMouseEvent(lineShape, mouseEvent)) {
+                    editShape(shape, i);
+                }
             }
+
         }
+
+
     }
 
     public void editShape(Shape shape, int i) {
-        shape.setFill(colorChoice.getValue());
         if (shape.getClass().equals(Circle.class)) {
-            Circle temp = (Circle) shape;
-            temp.setRadius(pixelSlider.getValue());
+            editCircle(shape, i);
+            updateCanvas();
+        } else if (shape.getClass().equals(Square.class)) {
+
+            Square temp = (Square) shape;
+            temp.color = colorChoice.getValue();
+            temp.size = pixelSlider.getValue();
+            shapeStack.set(i, temp);
+            updateCanvas();
+        } else if (shape.getClass().equals(Line.class)) {
+            Line temp = (Line) shape;
+            temp.color = colorChoice.getValue();
+            temp.width = pixelSlider.getValue();
             shapeStack.set(i, temp);
             updateCanvas();
         }
@@ -108,20 +123,49 @@ public class HelloController {
     }
 
 
-    private void updateCanvas() {
+
+
+    public void updateCanvas() {
         context.clearRect(0, 0, 500, 500);
         for (Shape shape : shapeStack) {
             if (shape.getClass().equals(Circle.class)) {
                 addCircle(shape);
+            } else if (shape.getClass().equals(Square.class)) {
+                addSquare(shape);
+            }
+            if (shape.getClass().equals(Line.class)) {
+                addLine(shape);
             }
 
 
         }
     }
 
+    private void addLine(Shape shape) {
+
+        context.beginPath();
+        context.setStroke(((Line) shape).color);
+        context.setLineWidth(((Line) shape).width);
+
+        context.moveTo(((Line) shape).startX, ((Line) shape).startY);
+        context.lineTo(((Line) shape).endX, ((Line) shape).endY);
+        context.setLineCap(StrokeLineCap.ROUND);
+        context.closePath();
+        context.stroke();
+
+    }
+
+    private void addSquare(Shape shape) {
+        if (shape != null) {
+            Square squareShape = (Square) shape;
+            context.setFill(squareShape.color);
+            context.fillRect(squareShape.positionX, squareShape.positionY, squareShape.size, squareShape.size);
+        }
+    }
+
     private void addCircle(Shape shape) {
 
-        if(shape!=null) {
+        if (shape != null) {
             Circle circleShape = (Circle) shape;
             context.setFill(shape.getFill());
             context.fillRoundRect(circleShape.getCenterX(), circleShape.getCenterY(), circleShape.getRadius(), circleShape.getRadius(), circleShape.getRadius(), circleShape.getRadius());
@@ -129,25 +173,21 @@ public class HelloController {
     }
 
     public void onCanvasDrag(MouseEvent mouseEvent) {
-//        if(tool.equals(Tools.FREEDRAW)){
-//        context.lineTo(mouseEvent.getX(), mouseEvent.getY());
-//        context.stroke();
-//        }
+
     }
 
 
     public void onCanvasRelease(MouseEvent mouseEvent) {
-//        if(tool.equals(Tools.LINES) || tool.equals(Tools.FREEDRAW)){
-//            context.lineTo(mouseEvent.getX(), mouseEvent.getY());
-//            context.stroke();
-//            context.closePath();
-//        }
+        if (tool.equals(Tools.LINE)) {
+            Line lineShape = new Line(startX, startY, mouseEvent.getX(), mouseEvent.getY(), pixelSlider.getValue(), colorChoice.getValue());
+            addToStack(lineShape);
+
+        }
     }
 
 
     @FXML
     void undoCanvas() {
-
         if (!shapeStack.empty()) {
             shapeUndoStack.add(shapeStack.peek());
             shapeStack.pop();
@@ -158,7 +198,7 @@ public class HelloController {
     @FXML
     void redoCanvas() {
 
-        if(!shapeUndoStack.empty()) {
+        if (!shapeUndoStack.empty()) {
             shapeStack.add(shapeUndoStack.peek());
             shapeUndoStack.pop();
             updateCanvas();
@@ -166,8 +206,8 @@ public class HelloController {
     }
 
     public void toolChoiceMade() {
-        if (toolsList.getValue().equalsIgnoreCase("lines")) {
-            tool = Tools.LINES;
+        if (toolsList.getValue().equalsIgnoreCase("line")) {
+            tool = Tools.LINE;
 
         } else if (toolsList.getValue().equalsIgnoreCase("free draw")) {
             tool = Tools.FREEDRAW;
@@ -175,6 +215,8 @@ public class HelloController {
         } else if (toolsList.getValue().equalsIgnoreCase("Circle")) {
             tool = Tools.CIRCLE;
 
+        } else if (toolsList.getValue().equalsIgnoreCase("Square")) {
+            tool = Tools.SQUARE;
         }
     }
 
@@ -183,11 +225,29 @@ public class HelloController {
         updateCanvas();
     }
 
+    public void editToolActive() {
+        toolsList.setValue("Circle");
+        if (editTool.isSelected()) {
+            toolsList.setDisable(true);
+        } else {
+            toolsList.setDisable(false);
+        }
+    }
+
+    public void updateColor() {
+        shapeColor = colorChoice.getValue();
+    }
+
+    public void updatePixel() {
+        shapeSize = pixelSlider.getValue();
+    }
+
 
     public enum Tools {
-        LINES,
+        LINE,
         FREEDRAW,
-        CIRCLE
+        CIRCLE,
+        SQUARE
     }
 
 }

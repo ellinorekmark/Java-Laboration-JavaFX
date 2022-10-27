@@ -43,22 +43,25 @@
                <Label text="Size "/>
                <Label fx:id="pixelSizeInfo" />
            </HBox>
-           <ChoiceBox fx:id="toolsList" onAction="#toolChoiceMade" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+           <ChoiceBox fx:id="toolsList" onAction="#toolChoiceMade" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" >
                <items>
                    <FXCollections fx:factory="observableArrayList">
-                       <String fx:value="Lines" />
+                       <String fx:value="Line" />
                        <String fx:value="Free Draw" />
                        <String fx:value="Circle" />
+                       <String fx:value="Square" />
                    </FXCollections>
                </items>
            </ChoiceBox>
-           <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+           <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" onAction="#updateColor" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <Label text="Tool"/>
            </HBox>
-         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0" onMouseReleased="#setNewPixelSize" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0"  showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseReleased="#updatePixel" />
             <Label alignment="CENTER" contentDisplay="CENTER" text="Let's Draw" textAlignment="CENTER" GridPane.columnIndex="1" />
-         <ToggleButton fx:id="selectTool" mnemonicParsing="false" text="Select" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         <ToggleButton fx:id="editTool" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#editToolActive" >
+             <tooltip><Tooltip text="Click on a shape to change to current color and pixel choice." /></tooltip>
+         </ToggleButton>
        </GridPane>
    </top>
    <center>
