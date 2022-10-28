@@ -16,8 +16,7 @@ public class ShapesModel {
      public Stack<Shape> shapeStack = new Stack<>();
      public Stack<Shape> shapeUndoStack = new Stack<>();
 
-     public Stack<ChangedShape> editHistoryStack = new Stack<>();
-     public Stack<ChangedShape> redoHistoryStack = new Stack<>();
+
 
      public double lineStartX;
      public double lineStartY;
@@ -29,19 +28,19 @@ public class ShapesModel {
     public void addToStack(Shape shape) {
         shapeStack.add(shape);
         shapeUndoStack.clear();
-        redoHistoryStack.clear();
+
 
     }
-    public void createShape(MouseEvent mouseEvent){
+    public void createShape(MouseEvent mouseEvent, Color color, double size){
         switch(shapeTool){
             case LINE -> createLineStart(mouseEvent);
-            case CIRCLE -> createCircle(mouseEvent);
-            case SQUARE -> createSquare(mouseEvent);
+            case CIRCLE -> createCircle(mouseEvent, color, size);
+            case SQUARE -> createSquare(mouseEvent, color, size);
         }
 
     }
-    private void createSquare(MouseEvent mouseEvent) {
-        addToStack(new Square(mouseEvent.getX() - (shapeSize / 2), mouseEvent.getY() - (shapeSize / 2), shapeSize, shapeColor));
+    private void createSquare(MouseEvent mouseEvent, Color color, double size) {
+        addToStack(new Square(mouseEvent.getX() - (shapeSize / 2), mouseEvent.getY() - (shapeSize / 2), size, color));
     }
 
     private void createLineStart(MouseEvent mouseEvent) {
@@ -54,25 +53,25 @@ public class ShapesModel {
     }
 
 
-    private void createCircle(MouseEvent mouseEvent) {
-        addToStack(new Circle(mouseEvent.getX() - (shapeSize / 2), mouseEvent.getY() - (shapeSize / 2), shapeSize, shapeColor));
+    private void createCircle(MouseEvent mouseEvent, Color color, double size) {
+        addToStack(new Circle(mouseEvent.getX() - (size / 2), mouseEvent.getY() - (size / 2), size, color));
     }
 
-    public void tryEditShape(MouseEvent mouseEvent) {
+    public void tryEditShape(MouseEvent mouseEvent, Color color, double size) {
 
         for (int i = 0; i < shapeStack.size(); i++) {
 
             if (shapeStack.get(i).getClass().equals(Circle.class)) {
                 if (compareCircleAndMouseEvent((Circle)shapeStack.get(i), mouseEvent)) {
-                    editCircle((Circle)shapeStack.get(i), i);
+                    editCircle((Circle)shapeStack.get(i), i, color, size);
                 }
             } else if (shapeStack.get(i).getClass().equals(Square.class)) {
                 if (compareSquareAndMouseEvent((Square)shapeStack.get(i), mouseEvent)) {
-                    editSquare((Square) shapeStack.get(i), i);
+                    editSquare((Square) shapeStack.get(i), i, color, size);
                 }
             } else if (shapeStack.get(i).getClass().equals(Line.class)) {
                 if (compareLineAndMouseEvent((Line)shapeStack.get(i), mouseEvent)) {
-                    editLine((Line) shapeStack.get(i), i);
+                    editLine((Line) shapeStack.get(i), i, color, size);
                 }
             }
 
@@ -90,10 +89,10 @@ public class ShapesModel {
 
 
 
-    public void editCircle(Shape shape, int i) {
-        shape.setFill(shapeColor);
+    public void editCircle(Shape shape, int i, Color color, double size) {
+        shape.setFill(color);
         Circle temp = (Circle) shape;
-        temp.setRadius(shapeSize);
+        temp.setRadius(size);
         shapeStack.set(i, temp);
     }
 
@@ -133,19 +132,14 @@ public class ShapesModel {
     }
 
 
-    public void editCircle(Circle shape, int i) {
-        shape.setFill(shapeColor);
-        shape.setRadius(shapeSize);
-        shapeStack.set(i, shape);
-    }
-    public void editSquare(Square shape, int i) {
-        shape.color = shapeColor;
-        shape.size = shapeSize;
+    public void editSquare(Square shape, int i, Color color, double size) {
+        shape.color = color;
+        shape.size = size;
         shapeStack.set(i,shape);
     }
-    public void editLine(Line shape, int i) {
-        shape.color = shapeColor;
-        shape.width = shapeSize;
+    public void editLine(Line shape, int i, Color color, double size) {
+        shape.color = color;
+        shape.width = size;
         shapeStack.set(i, shape);
     }
 

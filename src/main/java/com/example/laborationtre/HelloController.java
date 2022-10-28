@@ -56,9 +56,9 @@ public class HelloController {
 
 
         if (editTool.isSelected()) {
-            shapesModel.tryEditShape(mouseEvent);
+            shapesModel.tryEditShape(mouseEvent, colorChoice.getValue(), pixelSlider.getValue());
         } else {
-            shapesModel.createShape(mouseEvent);
+            shapesModel.createShape(mouseEvent, colorChoice.getValue(), pixelSlider.getValue());
         }
         updateCanvas();
     }
@@ -166,13 +166,7 @@ public class HelloController {
 
     }
 
-    public void updateColor() {
-        shapesModel.shapeColor = colorChoice.getValue();
-    }
 
-    public void updatePixel() {
-        shapesModel.shapeSize = pixelSlider.getValue();
-    }
 
 
     public enum Tools {
