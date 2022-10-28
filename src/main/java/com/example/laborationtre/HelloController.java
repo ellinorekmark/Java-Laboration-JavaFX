@@ -18,6 +18,7 @@ import static com.example.laborationtre.Square.*;
 
 
 public class HelloController {
+    ShapesModel shapesModel = new ShapesModel();
 
     public Canvas canvas;
     @FXML
@@ -55,9 +56,9 @@ public class HelloController {
 
 
         if (editTool.isSelected()) {
-            tryEditShape(mouseEvent);
+            shapesModel.tryEditShape(mouseEvent);
         } else {
-            createShape(mouseEvent);
+            shapesModel.createShape(mouseEvent);
         }
         updateCanvas();
     }
@@ -76,7 +77,7 @@ public class HelloController {
 
     public void updateCanvas() {
         context.clearRect(0, 0, 500, 500);
-        for (Shape shape : shapeStack) {
+        for (Shape shape : shapesModel.shapeStack) {
             if (shape.getClass().equals(Circle.class)) {
                 drawCircle(shape);
             } else if (shape.getClass().equals(Square.class)) {
@@ -114,17 +115,17 @@ public class HelloController {
     }
 
     public void onCanvasRelease(MouseEvent mouseEvent) {
-        if (shapeTool.equals(ToolOption.LINE)) {
-            finishLine(mouseEvent);
+        if (shapesModel.shapeTool.equals(ToolOption.LINE)) {
+            shapesModel.finishLine(mouseEvent);
             updateCanvas();
         }
     }
 
     @FXML
     void undoCanvas() {
-        if (!shapeStack.empty()) {
-            shapeUndoStack.add(shapeStack.peek());
-            shapeStack.pop();
+        if (!shapesModel.shapeStack.empty()) {
+            shapesModel.shapeUndoStack.add(shapesModel.shapeStack.peek());
+            shapesModel.shapeStack.pop();
             updateCanvas();
         }
     }
@@ -132,30 +133,30 @@ public class HelloController {
     @FXML
     void redoCanvas() {
 
-        if (!shapeUndoStack.empty()) {
-            shapeStack.add(shapeUndoStack.peek());
-            shapeUndoStack.pop();
+        if (!shapesModel.shapeUndoStack.empty()) {
+            shapesModel.shapeStack.add(shapesModel.shapeUndoStack.peek());
+            shapesModel.shapeUndoStack.pop();
             updateCanvas();
         }
     }
 
     public void toolChoiceMade() {
         if (toolsList.getValue().equalsIgnoreCase("line")) {
-            shapeTool = ToolOption.LINE;
+            shapesModel.shapeTool = ToolOption.LINE;
 
         } else if (toolsList.getValue().equalsIgnoreCase("free draw")) {
-            shapeTool = ToolOption.FREEDRAW;
+            shapesModel.shapeTool = ToolOption.FREEDRAW;
 
         } else if (toolsList.getValue().equalsIgnoreCase("Circle")) {
-            shapeTool = ToolOption.CIRCLE;
+            shapesModel.shapeTool = ToolOption.CIRCLE;
 
         } else if (toolsList.getValue().equalsIgnoreCase("Square")) {
-            shapeTool = ToolOption.SQUARE;
+            shapesModel.shapeTool = ToolOption.SQUARE;
         }
     }
 
     public void clearCanvas() {
-        shapeStack.clear();
+        shapesModel.shapeStack.clear();
         updateCanvas();
     }
 
@@ -166,11 +167,11 @@ public class HelloController {
     }
 
     public void updateColor() {
-        shapeColor = colorChoice.getValue();
+        shapesModel.shapeColor = colorChoice.getValue();
     }
 
     public void updatePixel() {
-        shapeSize = pixelSlider.getValue();
+        shapesModel.shapeSize = pixelSlider.getValue();
     }
 
 
