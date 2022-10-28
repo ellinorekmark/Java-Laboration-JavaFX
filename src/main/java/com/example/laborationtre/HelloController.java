@@ -28,7 +28,6 @@ public class HelloController {
     ShapesModel shapesModel = new ShapesModel();
 
     public Canvas canvas;
-
     public Stage stage;
     @FXML
     public Button undoButton;
@@ -36,34 +35,28 @@ public class HelloController {
     public Button saveButton;
     public Button clearButton;
     public ColorPicker colorChoice;
-
     public static GraphicsContext context;
     public ChoiceBox<String> toolsList;
-
     public Slider pixelSlider;
-
-
-
-
-    public Label pixelSizeInfo;
     public ToggleButton editTool;
+    public Label pixelSizeInfo;
+
+
+
+
 
 
     public void initialize() {
         context = canvas.getGraphicsContext2D();
-        saveButton.disableProperty().bind(Bindings.isEmpty(shapesModel.observableList));
+        saveButton.disableProperty().bind(Bindings.isEmpty(shapesModel.shapeStack));
         colorChoice.valueProperty().bindBidirectional(shapesModel.color);
         pixelSlider.valueProperty().bindBidirectional(shapesModel.size);
         toolsList.valueProperty().bindBidirectional(shapesModel.tool);
         toolsList.disableProperty().bind(editTool.selectedProperty());
-        canvas.onMousePressedProperty().bindBidirectional(shapesModel.mouseEvent);
     }
-
-
 
     @FXML
     protected void onCanvasPress(MouseEvent mouseEvent) {
-
 
         if (editTool.isSelected()) {
             shapesModel.tryEditShape(mouseEvent);
@@ -72,9 +65,6 @@ public class HelloController {
         }
         updateCanvas();
     }
-
-
-
     public void updateCanvas() {
         context.clearRect(0, 0, 500, 500);
         for (Shape shape : shapesModel.shapeStack) {
@@ -123,24 +113,18 @@ public class HelloController {
 
     @FXML
     void undoCanvas() {
-        if (!shapesModel.shapeStack.empty()) {
-            shapesModel.redoStack.add(shapesModel.shapeStack);
-            shapesModel.shapeStack.clear();
-            shapesModel.shapeStack.addAll(shapesModel.historyStack.peek());
-            shapesModel.historyStack.pop();
-
-            //shapesModel.shapeUndoStack.add(shapesModel.shapeStack.peek());
-            //shapesModel.shapeStack.pop();
+        if (!shapesModel.shapeStack.isEmpty()) {
+            shapesModel.redoShapeStack.add(shapesModel.shapeStack.get(shapesModel.shapeStack.size()-1));
+            shapesModel.shapeStack.remove(shapesModel.shapeStack.size()-1);
             updateCanvas();
         }
     }
-
     @FXML
     void redoCanvas() {
 
-        if (!shapesModel.shapeUndoStack.empty()) {
-            shapesModel.shapeStack.add(shapesModel.shapeUndoStack.peek());
-            shapesModel.shapeUndoStack.pop();
+        if (!shapesModel.redoShapeStack.isEmpty()) {
+            shapesModel.shapeStack.add(shapesModel.redoShapeStack.get(shapesModel.redoShapeStack.size()-1));
+            shapesModel.redoShapeStack.remove(shapesModel.redoShapeStack.size()-1);
             updateCanvas();
         }
     }

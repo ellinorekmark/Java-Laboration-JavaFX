@@ -3,8 +3,7 @@ package com.example.laborationtre;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -24,18 +23,14 @@ public class ShapesModel {
     ObjectProperty<Number> size = new SimpleObjectProperty<>(50);
     ObjectProperty<Color> color = new SimpleObjectProperty<>(Color.BLACK);
     ObjectProperty<String> tool = new SimpleObjectProperty<>("Circle");
-    ObjectProperty<EventHandler<? super MouseEvent>> mouseEvent = new SimpleObjectProperty<>();
-    StringProperty sizeString = new SimpleStringProperty(Math.round(size.get().doubleValue())+" px");
+    ObjectProperty<Double> mousePressX = new SimpleObjectProperty<>();
+    ObjectProperty<Double> mousePressY = new SimpleObjectProperty<>();
 
 
 
+     ObservableList<Shape> shapeStack = FXCollections.observableArrayList();
+    ObservableList<Shape> redoShapeStack = FXCollections.observableArrayList();
 
-     public Stack<Shape> shapeStack = new Stack<>();
-     ObservableList<Shape> observableList = FXCollections.observableArrayList(shapeStack);
-     public Stack<Shape> shapeUndoStack = new Stack<>();
-
-public Stack<Stack<Shape>> historyStack = new Stack<>();
-public Stack <Stack<Shape>> redoStack = new Stack<>();
 
 
      public double lineStartX;
@@ -44,12 +39,7 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
     public ToolOption shapeTool;
 
     public void addToStack(Shape shape) {
-
-
         shapeStack.add(shape);
-        observableList.add(shape);
-
-
 
     }
     public void createShape(MouseEvent mouseEvent){
@@ -58,7 +48,6 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
             case CIRCLE -> createCircle(mouseEvent);
             case SQUARE -> createSquare(mouseEvent);
         }
-
     }
     private void createSquare(MouseEvent mouseEvent) {
         addToStack(new Square(mouseEvent.getX() - (size.get().doubleValue() / 2), mouseEvent.getY() - (size.get().doubleValue() / 2), size.get().doubleValue(), color.get()));
@@ -73,15 +62,12 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
         addToStack(new Line(lineStartX, lineStartY, mouseEvent.getX(), mouseEvent.getY(), size.get().doubleValue(), color.get()));
     }
 
-
     private void createCircle(MouseEvent mouseEvent) {
         addToStack(new Circle(mouseEvent.getX() - (size.get().doubleValue() / 2), mouseEvent.getY() - (size.get().doubleValue() / 2), size.get().doubleValue(), color.getValue()));
     }
 
     public void tryEditShape(MouseEvent mouseEvent) {
-
         for (int i = 0; i < shapeStack.size(); i++) {
-
             if (shapeStack.get(i).getClass().equals(Circle.class)) {
                 if (compareCircleAndMouseEvent((Circle)shapeStack.get(i), mouseEvent)) {
                     editCircle((Circle)shapeStack.get(i), i, color.get(), size.get().doubleValue());
@@ -95,7 +81,6 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
                     editLine((Line) shapeStack.get(i), i, color.get(), size.get().doubleValue());
                 }
             }
-
         }
     }
 
@@ -105,12 +90,7 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
         double startY = circleShape.getCenterY()+circleShape.getRadius();
         double endY = circleShape.getCenterY()-circleShape.getRadius();
         return mouseEvent.getX() > endX && mouseEvent.getX() < startX && mouseEvent.getY() > endY && mouseEvent.getY() < startY;
-
     }
-
-
-
-
 
 
     public boolean compareSquareAndMouseEvent(Square shape, MouseEvent mouseEvent){
@@ -150,7 +130,6 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
     public void editCircle(Circle shape, int i, Color color, double size) {
         shape.setFill(color);
         shape.setRadius(size);
-
         shapeStack.set(i, shape);
     }
     public void editSquare(Square shape, int i, Color color, double size) {
@@ -162,7 +141,6 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
     public void editLine(Line shape, int i, Color color, double size) {
         shape.color = color;
         shape.width = size;
-
         shapeStack.set(i, shape);
     }
 
@@ -176,11 +154,7 @@ public Stack <Stack<Shape>> redoStack = new Stack<>();
         CIRCLE,
         SQUARE
 
-
     }
-
-
-
 }
 
 
