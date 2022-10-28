@@ -57,7 +57,7 @@
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <Label text="Tool"/>
            </HBox>
-         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0"  showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2"  />
+         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0"  showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseReleased="#updatePixelSize" />
             <Label alignment="CENTER" contentDisplay="CENTER" text="Let's Draw" textAlignment="CENTER" GridPane.columnIndex="1" />
          <ToggleButton fx:id="editTool" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#editToolActive" >
              <tooltip><Tooltip text="Click on a shape to change to current color and pixel choice." /></tooltip>

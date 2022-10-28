@@ -18,11 +18,10 @@ public class ShapesModel {
 
 
 
+
      public double lineStartX;
      public double lineStartY;
 
-    public Color shapeColor;
-    public double shapeSize;
     public ToolOption shapeTool;
 
     public void addToStack(Shape shape) {
@@ -40,7 +39,7 @@ public class ShapesModel {
 
     }
     private void createSquare(MouseEvent mouseEvent, Color color, double size) {
-        addToStack(new Square(mouseEvent.getX() - (shapeSize / 2), mouseEvent.getY() - (shapeSize / 2), size, color));
+        addToStack(new Square(mouseEvent.getX() - (size / 2), mouseEvent.getY() - (size / 2), size, color));
     }
 
     private void createLineStart(MouseEvent mouseEvent) {
@@ -48,8 +47,8 @@ public class ShapesModel {
         lineStartY = mouseEvent.getY();
     }
 
-    public void finishLine(MouseEvent mouseEvent){
-        addToStack(new Line(lineStartX, lineStartY, mouseEvent.getX(), mouseEvent.getY(), shapeSize, shapeColor));
+    public void finishLine(MouseEvent mouseEvent, Color color, double size){
+        addToStack(new Line(lineStartX, lineStartY, mouseEvent.getX(), mouseEvent.getY(), size, color));
     }
 
 
@@ -89,12 +88,7 @@ public class ShapesModel {
 
 
 
-    public void editCircle(Shape shape, int i, Color color, double size) {
-        shape.setFill(color);
-        Circle temp = (Circle) shape;
-        temp.setRadius(size);
-        shapeStack.set(i, temp);
-    }
+
 
 
     public boolean compareSquareAndMouseEvent(Square shape, MouseEvent mouseEvent){
@@ -131,7 +125,11 @@ public class ShapesModel {
         return mouseEvent.getX() > leftEdge && mouseEvent.getX() < rightEdge && mouseEvent.getY() > bottom && mouseEvent.getY() < top;
     }
 
-
+    public void editCircle(Circle shape, int i, Color color, double size) {
+        shape.setFill(color);
+        shape.setRadius(size);
+        shapeStack.set(i, shape);
+    }
     public void editSquare(Square shape, int i, Color color, double size) {
         shape.color = color;
         shape.size = size;

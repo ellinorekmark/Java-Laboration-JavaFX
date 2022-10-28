@@ -1,7 +1,7 @@
 package com.example.laborationtre;
 
 
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 
 import javafx.scene.canvas.Canvas;
@@ -12,9 +12,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
-import static com.example.laborationtre.Line.*;
+
 import static com.example.laborationtre.ShapesModel.*;
-import static com.example.laborationtre.Square.*;
+
 
 
 public class HelloController {
@@ -33,7 +33,7 @@ public class HelloController {
 
     public Slider pixelSlider;
 
-    public Tools tool;
+
 
 
     public Label pixelSizeInfo;
@@ -116,7 +116,7 @@ public class HelloController {
 
     public void onCanvasRelease(MouseEvent mouseEvent) {
         if (shapesModel.shapeTool.equals(ToolOption.LINE)) {
-            shapesModel.finishLine(mouseEvent);
+            shapesModel.finishLine(mouseEvent, colorChoice.getValue(), pixelSlider.getValue());
             updateCanvas();
         }
     }
@@ -166,15 +166,12 @@ public class HelloController {
 
     }
 
-
-
-
-    public enum Tools {
-        LINE,
-        FREEDRAW,
-        CIRCLE,
-        SQUARE
+    public void updatePixelSize() {
+        pixelSizeInfo.setText(Math.round(pixelSlider.getValue()) + " px");
     }
+
+
+
 
 }
 
