@@ -30,20 +30,20 @@
                <Button fx:id="redoButton" mnemonicParsing="false" onAction="#redoCanvas" text="Redo" />
            </HBox>
            <HBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
-               <Button fx:id="clearButton" mnemonicParsing="false" text="Clear Image" onAction="#clearCanvas"/>
+               <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearCanvas" text="Clear Image" />
            </HBox>
            <HBox alignment="CENTER" GridPane.columnIndex="3">
-               <Button fx:id="saveButton" mnemonicParsing="false" text="Save Image"/>
+               <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveAction" text="Save Image" />
            </HBox>
            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="77.0" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2">
                <opaqueInsets>
-                   <Insets/>
+                   <Insets />
                </opaqueInsets>
-               <Label text="Size "/>
-               <Label fx:id="pixelSizeInfo" />
+               <Label text="Size " />
+               <Label fx:id="pixelSizeInfo" text="50 px" />
            </HBox>
-           <ChoiceBox fx:id="toolsList" onAction="#toolChoiceMade" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" >
+           <ChoiceBox fx:id="toolsList" onAction="#toolChoiceMade" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <items>
                    <FXCollections fx:factory="observableArrayList">
                        <String fx:value="Line" />
@@ -53,13 +53,13 @@
                    </FXCollections>
                </items>
            </ChoiceBox>
-           <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2"  />
+           <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
-               <Label text="Tool"/>
+               <Label text="Tool" />
            </HBox>
-         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0"  showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseReleased="#updatePixelSize" />
+         <Slider fx:id="pixelSlider" blockIncrement="5.0" min="1.0" onMouseReleased="#updatePixelSize" showTickMarks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label alignment="CENTER" contentDisplay="CENTER" text="Let's Draw" textAlignment="CENTER" GridPane.columnIndex="1" />
-         <ToggleButton fx:id="editTool" mnemonicParsing="false" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#editToolActive" >
+         <ToggleButton fx:id="editTool" mnemonicParsing="false" onAction="#editToolActive" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1">
              <tooltip><Tooltip text="Click on a shape to change to current color and pixel choice." /></tooltip>
          </ToggleButton>
        </GridPane>

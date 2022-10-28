@@ -2,6 +2,9 @@ package com.example.laborationtre;
 
 
 
+import javafx.beans.binding.Bindings;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.canvas.Canvas;
@@ -11,7 +14,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+
+import java.io.File;
 
 import static com.example.laborationtre.ShapesModel.*;
 
@@ -21,6 +28,8 @@ public class HelloController {
     ShapesModel shapesModel = new ShapesModel();
 
     public Canvas canvas;
+
+    public Stage stage;
     @FXML
     public Button undoButton;
     public Button redoButton;
@@ -42,11 +51,12 @@ public class HelloController {
 
     public void initialize() {
         context = canvas.getGraphicsContext2D();
-        //sets some choices in the tools options etc. to start with
-        colorChoice.setValue(Color.BLACK);
-        pixelSizeInfo.setText(Math.round(pixelSlider.getValue()) + " px");
-        toolsList.setValue("Circle");
-
+        saveButton.disableProperty().bind(Bindings.isEmpty(shapesModel.observableList));
+        colorChoice.valueProperty().bindBidirectional(shapesModel.color);
+        pixelSlider.valueProperty().bindBidirectional(shapesModel.size);
+        toolsList.valueProperty().bindBidirectional(shapesModel.tool);
+        toolsList.disableProperty().bind(editTool.selectedProperty());
+        canvas.onMousePressedProperty().bindBidirectional(shapesModel.mouseEvent);
     }
 
 
@@ -56,22 +66,12 @@ public class HelloController {
 
 
         if (editTool.isSelected()) {
-            shapesModel.tryEditShape(mouseEvent, colorChoice.getValue(), pixelSlider.getValue());
+            shapesModel.tryEditShape(mouseEvent);
         } else {
-            shapesModel.createShape(mouseEvent, colorChoice.getValue(), pixelSlider.getValue());
+            shapesModel.createShape(mouseEvent);
         }
         updateCanvas();
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -116,7 +116,7 @@ public class HelloController {
 
     public void onCanvasRelease(MouseEvent mouseEvent) {
         if (shapesModel.shapeTool.equals(ToolOption.LINE)) {
-            shapesModel.finishLine(mouseEvent, colorChoice.getValue(), pixelSlider.getValue());
+            shapesModel.finishLine(mouseEvent);
             updateCanvas();
         }
     }
@@ -124,8 +124,13 @@ public class HelloController {
     @FXML
     void undoCanvas() {
         if (!shapesModel.shapeStack.empty()) {
-            shapesModel.shapeUndoStack.add(shapesModel.shapeStack.peek());
-            shapesModel.shapeStack.pop();
+            shapesModel.redoStack.add(shapesModel.shapeStack);
+            shapesModel.shapeStack.clear();
+            shapesModel.shapeStack.addAll(shapesModel.historyStack.peek());
+            shapesModel.historyStack.pop();
+
+            //shapesModel.shapeUndoStack.add(shapesModel.shapeStack.peek());
+            //shapesModel.shapeStack.pop();
             updateCanvas();
         }
     }
@@ -162,8 +167,6 @@ public class HelloController {
 
     public void editToolActive() {
         toolsList.setValue("Circle");
-        toolsList.setDisable(editTool.isSelected());
-
     }
 
     public void updatePixelSize() {
@@ -171,8 +174,20 @@ public class HelloController {
     }
 
 
+    public void onSaveAction(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG","*.svg"));
+        File filepath = fileChooser.showSaveDialog(stage);
 
+        if(filepath!=null) {
+            java.nio.file.Path path = java.nio.file.Path.of(filepath.toURI());
+            shapesModel.saveToFile(path);
+        }
 
+    }
 }
 
 

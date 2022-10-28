@@ -1,9 +1,18 @@
 package com.example.laborationtre;
 
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+
 
 import java.util.Stack;
 
@@ -12,11 +21,21 @@ import java.util.Stack;
 
 public class ShapesModel {
 
+    ObjectProperty<Number> size = new SimpleObjectProperty<>(50);
+    ObjectProperty<Color> color = new SimpleObjectProperty<>(Color.BLACK);
+    ObjectProperty<String> tool = new SimpleObjectProperty<>("Circle");
+    ObjectProperty<EventHandler<? super MouseEvent>> mouseEvent = new SimpleObjectProperty<>();
+    StringProperty sizeString = new SimpleStringProperty(Math.round(size.get().doubleValue())+" px");
+
+
+
 
      public Stack<Shape> shapeStack = new Stack<>();
+     ObservableList<Shape> observableList = FXCollections.observableArrayList(shapeStack);
      public Stack<Shape> shapeUndoStack = new Stack<>();
 
-
+public Stack<Stack<Shape>> historyStack = new Stack<>();
+public Stack <Stack<Shape>> redoStack = new Stack<>();
 
 
      public double lineStartX;
@@ -25,21 +44,24 @@ public class ShapesModel {
     public ToolOption shapeTool;
 
     public void addToStack(Shape shape) {
+
+
         shapeStack.add(shape);
-        shapeUndoStack.clear();
+        observableList.add(shape);
+
 
 
     }
-    public void createShape(MouseEvent mouseEvent, Color color, double size){
+    public void createShape(MouseEvent mouseEvent){
         switch(shapeTool){
             case LINE -> createLineStart(mouseEvent);
-            case CIRCLE -> createCircle(mouseEvent, color, size);
-            case SQUARE -> createSquare(mouseEvent, color, size);
+            case CIRCLE -> createCircle(mouseEvent);
+            case SQUARE -> createSquare(mouseEvent);
         }
 
     }
-    private void createSquare(MouseEvent mouseEvent, Color color, double size) {
-        addToStack(new Square(mouseEvent.getX() - (size / 2), mouseEvent.getY() - (size / 2), size, color));
+    private void createSquare(MouseEvent mouseEvent) {
+        addToStack(new Square(mouseEvent.getX() - (size.get().doubleValue() / 2), mouseEvent.getY() - (size.get().doubleValue() / 2), size.get().doubleValue(), color.get()));
     }
 
     private void createLineStart(MouseEvent mouseEvent) {
@@ -47,30 +69,30 @@ public class ShapesModel {
         lineStartY = mouseEvent.getY();
     }
 
-    public void finishLine(MouseEvent mouseEvent, Color color, double size){
-        addToStack(new Line(lineStartX, lineStartY, mouseEvent.getX(), mouseEvent.getY(), size, color));
+    public void finishLine(MouseEvent mouseEvent){
+        addToStack(new Line(lineStartX, lineStartY, mouseEvent.getX(), mouseEvent.getY(), size.get().doubleValue(), color.get()));
     }
 
 
-    private void createCircle(MouseEvent mouseEvent, Color color, double size) {
-        addToStack(new Circle(mouseEvent.getX() - (size / 2), mouseEvent.getY() - (size / 2), size, color));
+    private void createCircle(MouseEvent mouseEvent) {
+        addToStack(new Circle(mouseEvent.getX() - (size.get().doubleValue() / 2), mouseEvent.getY() - (size.get().doubleValue() / 2), size.get().doubleValue(), color.getValue()));
     }
 
-    public void tryEditShape(MouseEvent mouseEvent, Color color, double size) {
+    public void tryEditShape(MouseEvent mouseEvent) {
 
         for (int i = 0; i < shapeStack.size(); i++) {
 
             if (shapeStack.get(i).getClass().equals(Circle.class)) {
                 if (compareCircleAndMouseEvent((Circle)shapeStack.get(i), mouseEvent)) {
-                    editCircle((Circle)shapeStack.get(i), i, color, size);
+                    editCircle((Circle)shapeStack.get(i), i, color.get(), size.get().doubleValue());
                 }
             } else if (shapeStack.get(i).getClass().equals(Square.class)) {
                 if (compareSquareAndMouseEvent((Square)shapeStack.get(i), mouseEvent)) {
-                    editSquare((Square) shapeStack.get(i), i, color, size);
+                    editSquare((Square) shapeStack.get(i), i, color.get(), size.get().doubleValue());
                 }
             } else if (shapeStack.get(i).getClass().equals(Line.class)) {
                 if (compareLineAndMouseEvent((Line)shapeStack.get(i), mouseEvent)) {
-                    editLine((Line) shapeStack.get(i), i, color, size);
+                    editLine((Line) shapeStack.get(i), i, color.get(), size.get().doubleValue());
                 }
             }
 
@@ -128,17 +150,23 @@ public class ShapesModel {
     public void editCircle(Circle shape, int i, Color color, double size) {
         shape.setFill(color);
         shape.setRadius(size);
+
         shapeStack.set(i, shape);
     }
     public void editSquare(Square shape, int i, Color color, double size) {
         shape.color = color;
         shape.size = size;
+
         shapeStack.set(i,shape);
     }
     public void editLine(Line shape, int i, Color color, double size) {
         shape.color = color;
         shape.width = size;
+
         shapeStack.set(i, shape);
+    }
+
+    public void saveToFile(java.nio.file.Path file) {
     }
 
 
@@ -147,6 +175,8 @@ public class ShapesModel {
         FREEDRAW,
         CIRCLE,
         SQUARE
+
+
     }
 
 
