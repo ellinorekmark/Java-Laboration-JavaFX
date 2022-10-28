@@ -68,7 +68,7 @@ public class HelloController {
     public void updateCanvas() {
         context.clearRect(0, 0, 500, 500);
         for (Shape shape : shapesModel.shapeStack) {
-            if (shape.getClass().equals(Circle.class)) {
+            if (shape.getClass().equals(MyCircle.class)) {
                 drawCircle(shape);
             } else if (shape.getClass().equals(Square.class)) {
                 drawSquare(shape);
@@ -96,7 +96,7 @@ public class HelloController {
     }
 
     private void drawCircle(Shape shape) {
-        Circle circleShape = (Circle) shape;
+        MyCircle circleShape = (MyCircle) shape;
         context.setFill(shape.getFill());
         context.fillRoundRect(circleShape.getCenterX(), circleShape.getCenterY(), circleShape.getRadius(), circleShape.getRadius(), circleShape.getRadius(), circleShape.getRadius());
     }
