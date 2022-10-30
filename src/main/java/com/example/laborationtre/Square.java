@@ -17,9 +17,7 @@ public class Square extends MyShape {
         this.color = color;
     }
 
-    public String circleToSVG(){
-        return "<circle cx=\""+positionX+"\" cy=\""+positionY+"\" r=\""+size+"\" fill=\""+color+"\"/>";
-    }
+
     public String toSVG(){
         return "<path d=\"M "+positionX+" "+positionY+" h "+size+" v "+size+" h "+(-size)+" Z\" fill=\""+color+"\" stroke=\"transparent\"/>";
     }

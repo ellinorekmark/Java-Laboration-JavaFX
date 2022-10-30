@@ -11,4 +11,5 @@ abstract public class MyShape extends Shape {
 
 
     abstract public MyShape editShape(MyShape shape, Color color,double size);
+    abstract public String toSVG();
 }

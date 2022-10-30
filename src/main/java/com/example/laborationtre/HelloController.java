@@ -97,7 +97,7 @@ public class HelloController {
 
     private void drawCircle(Shape shape) {
         MyCircle circleShape = (MyCircle) shape;
-        context.setFill(shape.getFill());
+        context.setFill(circleShape.getColor());
         context.fillRoundRect(circleShape.getCenterX(), circleShape.getCenterY(), circleShape.getRadius(), circleShape.getRadius(), circleShape.getRadius(), circleShape.getRadius());
     }
     public void onCanvasDrag(MouseEvent mouseEvent) {

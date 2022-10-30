@@ -22,7 +22,8 @@ public class Line extends MyShape {
     }
 
     public String toSVG(){
-        return "<line x1=\""+startX+"\" x2=\""+endX+"\" y1=\""+startY+"\" y2=\""+endY+"\" stroke=\""+color+"\" stroke-width=\""+width+"\"/>";
+        System.out.println("<line x1=\""+startX+"\" x2=\""+endX+"\" y1=\""+startY+"\" y2=\""+endY+"\" stroke=\""+color.getRed()+","+color.getGreen()+","+color.getBlue()+"\" stroke-width=\""+width+"\"/>");
+        return "<line x1=\""+startX+"\" x2=\""+endX+"\" y1=\""+startY+"\" y2=\""+endY+"\" stroke=\""+color.getRed()+color.getGreen()+color.getBlue()+"\" stroke-width=\""+width+"\"/>";
     }
 
     @Override

@@ -31,8 +31,8 @@ public class ShapesModel {
 
 
 
-     ObservableList<Shape> shapeStack = FXCollections.observableArrayList();
-    ObservableList<Shape> redoShapeStack = FXCollections.observableArrayList();
+     ObservableList<MyShape> shapeStack = FXCollections.observableArrayList();
+    ObservableList<MyShape> redoShapeStack = FXCollections.observableArrayList();
 
 
 
@@ -41,7 +41,7 @@ public class ShapesModel {
 
     public ToolOption shapeTool;
 
-    public void addToStack(Shape shape) {
+    public void addToStack(MyShape shape) {
         shapeStack.add(shape);
 
     }
@@ -82,9 +82,8 @@ public class ShapesModel {
 
         String string="<?xml version=\"1.0\" standalone=\"no\"?>\n"+
                 "<svg width=\"500\" height=\"500\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
-        for (Shape shape:shapeStack) {
-            //string=string+shape.toSVG();
-
+        for (MyShape shape:shapeStack) {
+            string=string+shape.toSVG()+"\n";
         }
 
         try {

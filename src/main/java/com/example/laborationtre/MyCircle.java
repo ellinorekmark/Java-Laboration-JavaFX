@@ -71,4 +71,10 @@ public class MyCircle extends MyShape{
         return myCircle;
 
     }
+
+    @Override
+    public String toSVG() {
+        return "<circle cx=\""+centerX+"\" cy=\""+centerY+"\" r=\""+radius+"\" fill=\""+color.getRed()+","+color.getGreen()+","+color.getBlue()+"\"/>";
+    }
+
 }
