@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.laborationtre.HelloController">
     <padding>
@@ -43,15 +43,16 @@
                <Label text="Size " />
                <Label fx:id="pixelSizeInfo" text="50 px" />
            </HBox>
-           <ChoiceBox fx:id="toolsList" onAction="#toolChoiceMade" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <items>
-                   <FXCollections fx:factory="observableArrayList">
-                       <String fx:value="Line" />
-                       <String fx:value="Free Draw" />
-                       <String fx:value="Circle" />
-                       <String fx:value="Square" />
-                   </FXCollections>
-               </items>
+           <ChoiceBox fx:id="toolsList"  prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+<!--               <items>-->
+<!--                   <FXCollections  fx:id="toolDropDown" fx:factory="observableArrayList" >-->
+
+<!--&lt;!&ndash;                       <String fx:value="Line" />&ndash;&gt;-->
+<!--&lt;!&ndash;                       <String fx:value="Free Draw" />&ndash;&gt;-->
+<!--&lt;!&ndash;                       <String fx:value="Circle" />&ndash;&gt;-->
+<!--&lt;!&ndash;                       <String fx:value="Square" />&ndash;&gt;-->
+<!--                   </FXCollections>-->
+<!--               </items>-->
            </ChoiceBox>
            <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">

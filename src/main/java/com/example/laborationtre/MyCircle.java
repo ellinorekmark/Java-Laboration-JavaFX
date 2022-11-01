@@ -1,80 +1,45 @@
 package com.example.laborationtre;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class MyCircle extends MyShape{
-
-    double centerX;
-    double centerY;
-    double radius;
-    Color color;
-
-    public MyCircle(double centerX, double centerY, double radius, Color color) {
-        this.centerX = centerX;
-        this.centerY = centerY;
-        this.radius = radius;
-        this.color = color;
+    public MyCircle(double x, double y, double size, Color color) {
+        super(x, y, size, color);
     }
-
-    public double getCenterX() {
-        return centerX;
-    }
-
-    public void setCenterX(double centerX) {
-        this.centerX = centerX;
-    }
-
-    public double getCenterY() {
-        return centerY;
-    }
-
-    public void setCenterY(double centerY) {
-        this.centerY = centerY;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-
-
 
 
     @Override
     public boolean compareShapeAndMouseEvent(MyShape shape, MouseEvent mouseEvent) {
         MyCircle circleShape = (MyCircle) shape;
-        double startX = circleShape.getCenterX()+circleShape.getRadius();
-        double endX = circleShape.getCenterX()-circleShape.getRadius();
-        double startY = circleShape.getCenterY()+circleShape.getRadius();
-        double endY = circleShape.getCenterY()-circleShape.getRadius();
+        double startX = circleShape.getX()+circleShape.getSize();
+        double endX = circleShape.getX()-circleShape.getY();
+        double startY = circleShape.getY()+circleShape.getSize();
+        double endY = circleShape.getY()-circleShape.getSize();
         return mouseEvent.getX() > endX && mouseEvent.getX() < startX && mouseEvent.getY() > endY && mouseEvent.getY() < startY;
+    }
+
+    @Override
+    public void draw(GraphicsContext context, MyShape shape) {
+        MyCircle circleShape = (MyCircle) shape;
+        System.out.println(((MyCircle) shape).getColor());
+        context.setFill(circleShape.getColor());
+        context.fillRoundRect(circleShape.getX(), circleShape.getY(), circleShape.getSize(), circleShape.getSize(), circleShape.getSize(), circleShape.getSize());
     }
 
     @Override
     public MyShape editShape(MyShape shape, Color color, double size) {
         MyCircle myCircle = (MyCircle)shape;
-        myCircle.setFill(color);
-        myCircle.setRadius(size);
+        myCircle.setColor(color);
+        myCircle.setSize(size);
         return myCircle;
 
     }
 
     @Override
     public String toSVG() {
-        return "<circle cx=\""+centerX+"\" cy=\""+centerY+"\" r=\""+radius+"\" fill=\""+color.getRed()+","+color.getGreen()+","+color.getBlue()+"\"/>";
+        return "<circle cx=\""+getX()+"\" cy=\""+getY()+"\" r=\""+getSize()/2+"\" fill=\""+toHexString(getColor())+"\"/>";
     }
 
 }

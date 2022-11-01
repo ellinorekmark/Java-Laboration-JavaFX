@@ -1,29 +1,22 @@
 package com.example.laborationtre;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 
 public class Line extends MyShape {
-    double startX;
-    double startY;
     double endX;
     double endY;
-    double width;
-    Color color;
-
-    public Line(double startX, double startY, double endX, double endY, double width, Color color) {
-        this.startX = startX;
-        this.startY = startY;
+    public Line(double x, double y, double endX, double endY, double size, Color color) {
+        super(x, y, size, color);
         this.endX = endX;
         this.endY = endY;
-        this.width = width;
-        this.color = color;
     }
 
+
     public String toSVG(){
-        System.out.println("<line x1=\""+startX+"\" x2=\""+endX+"\" y1=\""+startY+"\" y2=\""+endY+"\" stroke=\""+color.getRed()+","+color.getGreen()+","+color.getBlue()+"\" stroke-width=\""+width+"\"/>");
-        return "<line x1=\""+startX+"\" x2=\""+endX+"\" y1=\""+startY+"\" y2=\""+endY+"\" stroke=\""+color.getRed()+color.getGreen()+color.getBlue()+"\" stroke-width=\""+width+"\"/>";
+        return "<line x1=\""+getX()+"\" y1=\""+getY()+"\" x2=\""+getEndX()+"\" y2=\""+getEndY()+"\" stroke=\""+toHexString(getColor())+"\" stroke-width=\""+getSize()+"\"/>";
+
     }
 
     @Override
@@ -34,31 +27,54 @@ public class Line extends MyShape {
         double top;
         double bottom;
 
-        if (lineShape.startX-lineShape.endX<0){
-            rightEdge = lineShape.endX;
-            leftEdge = lineShape.startX;
+        if (lineShape.getX()-lineShape.getEndX()<0){
+            rightEdge = lineShape.getEndX();
+            leftEdge = lineShape.getX();
         }
         else{
-            rightEdge = lineShape.startX;
-            leftEdge = lineShape.endX;
+            rightEdge = lineShape.getX();
+            leftEdge = lineShape.getEndX();
         }
 
-        if (lineShape.startY-lineShape.endY<0){
-            top = lineShape.endY;
-            bottom = lineShape.startY;
+        if (lineShape.getY()-lineShape.getEndY()<0){
+            top = lineShape.getEndY();
+            bottom = lineShape.getY();
         }
         else{
-            top = lineShape.startY;
-            bottom = lineShape.endY;
+            top = lineShape.getY();
+            bottom = lineShape.getEndY();
         }
         return mouseEvent.getX() > leftEdge && mouseEvent.getX() < rightEdge && mouseEvent.getY() > bottom && mouseEvent.getY() < top;
     }
 
     @Override
+    public void draw(GraphicsContext context, MyShape shape) {
+        context.beginPath();
+        context.setStroke(((Line) shape).getColor());
+        context.setLineWidth(((Line) shape).getSize());
+        context.moveTo(((Line) shape).getX(), ((Line) shape).getY());
+        context.lineTo(((Line) shape).getEndX(), ((Line) shape).getEndY());
+        context.closePath();
+        context.stroke();
+    }
+
+    @Override
     public MyShape editShape(MyShape shape, Color color, double size) {
         Line myLine = (Line)shape;
-        myLine.color = color;
-        myLine.width = size;
+        myLine.setColor(color);
+        myLine.setSize(size);
         return myLine;
     }
+
+    public double getEndX() {
+        return endX;
+    }
+
+
+
+    public double getEndY() {
+        return endY;
+    }
+
+
 }
