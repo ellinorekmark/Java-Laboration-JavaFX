@@ -20,7 +20,7 @@ public class Line extends MyShape {
     }
 
     @Override
-    public boolean compareShapeAndMouseEvent(MyShape shape, MouseEvent mouseEvent) {
+    public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
         Line lineShape = (Line) shape;
         double rightEdge;
         double leftEdge;
@@ -44,7 +44,7 @@ public class Line extends MyShape {
             top = lineShape.getY();
             bottom = lineShape.getEndY();
         }
-        return mouseEvent.getX() > leftEdge && mouseEvent.getX() < rightEdge && mouseEvent.getY() > bottom && mouseEvent.getY() < top;
+        return x > leftEdge && x < rightEdge && y > bottom && y < top;
     }
 
     @Override

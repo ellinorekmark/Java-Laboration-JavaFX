@@ -9,8 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class ShapesModel {
@@ -23,51 +22,53 @@ public class ShapesModel {
     ObservableList<MyShape> shapeStack = FXCollections.observableArrayList();
     ObservableList<MyShape> redoShapeStack = FXCollections.observableArrayList();
 
-    ArrayList redoStack = new ArrayList<>();
+
 
 
     public double x;
     public double y;
 
-    public double endX;
-    public double endY;
+
 
 
     public void addToStack(MyShape shape) {
-        redoStack.add(List.of(shapeStack));
+
         shapeStack.add(shape);
     }
 
     public void createShape(MouseEvent mouseEvent) {
+        double x = mouseEvent.getX();
+        double y = mouseEvent.getY();
         switch (tool.getValue()) {
-            case LINE -> createLineStart(mouseEvent);
-            case CIRCLE -> createCircle(mouseEvent);
-            case SQUARE -> createSquare(mouseEvent);
+            case LINE -> createLineStart(x, y);
+            case CIRCLE -> createCircle(x,y);
+            case SQUARE -> createSquare(x,y);
         }
     }
 
-    private void createSquare(MouseEvent mouseEvent) {
-        addToStack(new Square(mouseEvent.getX() - (size.get().doubleValue() / 2), mouseEvent.getY() - (size.get().doubleValue() / 2), size.get().doubleValue(), color.get()));
+    private void createSquare(double x, double y) {
+        addToStack(new Square(x - (size.get().doubleValue() / 2), y - (size.get().doubleValue() / 2), size.get().doubleValue(), color.get()));
     }
 
-    private void createLineStart(MouseEvent mouseEvent) {
-        x = mouseEvent.getX();
-        y = mouseEvent.getY();
+    private void createLineStart(double posX, double posY) {
+        x = posX;
+        y = posY;
     }
 
     public void finishLine(MouseEvent mouseEvent) {
         addToStack(new Line(x, y, mouseEvent.getX(), mouseEvent.getY(), size.get().doubleValue(), color.get()));
     }
 
-    private void createCircle(MouseEvent mouseEvent) {
-        addToStack(new MyCircle(mouseEvent.getX() - (size.get().doubleValue() / 2), mouseEvent.getY() - (size.get().doubleValue() / 2), size.get().doubleValue(), color.getValue()));
+    private void createCircle(double x, double y) {
+        addToStack(new MyCircle(x - (size.get().doubleValue() / 2), y - (size.get().doubleValue() / 2), size.get().doubleValue(), color.getValue()));
     }
 
     public void tryEditShape(MouseEvent mouseEvent) {
-        redoStack.add(List.of(shapeStack));
+        double x = mouseEvent.getX();
+        double y = mouseEvent.getY();
         for (int i = 0; i < shapeStack.size(); i++) {
             MyShape shape = shapeStack.get(i);
-            if (shape.compareShapeAndMouseEvent(shape, mouseEvent)) {
+            if (shape.compareShapeAndMouseEvent(shape, x ,y)) {
                 shapeStack.set(i, shape.editShape(shape, color.get(), size.get().doubleValue()));
             }
         }

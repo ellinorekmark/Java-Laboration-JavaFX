@@ -62,6 +62,7 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
         toolsList.disableProperty().bind(editTool.selectedProperty());
         shapesModel.shapeStack.addListener((ListChangeListener<MyShape>) c -> updateCanvas()) ;
         toolsList.setItems(toolsDropDownList);
+        toolsList.setValue(ToolOption.CIRCLE);
 
     }
 
@@ -69,8 +70,7 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
 
     @FXML
     protected void onCanvasPress(MouseEvent mouseEvent) {
-        shapesModel.x = mouseEvent.getX();
-        shapesModel.y = mouseEvent.getY();
+
 
         if (editTool.isSelected()) {
             shapesModel.tryEditShape(mouseEvent);

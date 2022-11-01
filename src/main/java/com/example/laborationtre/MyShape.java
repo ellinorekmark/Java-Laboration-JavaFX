@@ -20,7 +20,7 @@ abstract public class MyShape extends Shape {
     }
 
 
-    abstract public boolean compareShapeAndMouseEvent(MyShape shape, MouseEvent mouseEvent);
+    abstract public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y);
     abstract public void draw(GraphicsContext context, MyShape shape);
 
 

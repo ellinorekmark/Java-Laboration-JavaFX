@@ -16,13 +16,13 @@ public class Square extends MyShape {
     }
 
     @Override
-    public boolean compareShapeAndMouseEvent(MyShape shape, MouseEvent mouseEvent) {
+    public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
         Square squareShape = (Square) shape;
             double startX = squareShape.getX();
             double endX = squareShape.getX()+squareShape.getSize();
             double startY = squareShape.getY();
             double endY = squareShape.getY()+squareShape.getSize();
-            return mouseEvent.getX() < endX && mouseEvent.getX() > startX && mouseEvent.getY() < endY && mouseEvent.getY() > startY;
+            return x < endX && x > startX && y < endY && y > startY;
 
     }
 

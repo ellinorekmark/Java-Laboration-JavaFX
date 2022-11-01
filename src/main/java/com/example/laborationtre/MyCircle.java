@@ -1,7 +1,7 @@
 package com.example.laborationtre;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
+
 import javafx.scene.paint.Color;
 
 public class MyCircle extends MyShape{
@@ -11,19 +11,18 @@ public class MyCircle extends MyShape{
 
 
     @Override
-    public boolean compareShapeAndMouseEvent(MyShape shape, MouseEvent mouseEvent) {
+    public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
         MyCircle circleShape = (MyCircle) shape;
         double startX = circleShape.getX()+circleShape.getSize();
         double endX = circleShape.getX()-circleShape.getY();
         double startY = circleShape.getY()+circleShape.getSize();
         double endY = circleShape.getY()-circleShape.getSize();
-        return mouseEvent.getX() > endX && mouseEvent.getX() < startX && mouseEvent.getY() > endY && mouseEvent.getY() < startY;
+        return x > endX && x < startX && y > endY && y < startY;
     }
 
     @Override
     public void draw(GraphicsContext context, MyShape shape) {
         MyCircle circleShape = (MyCircle) shape;
-        System.out.println(((MyCircle) shape).getColor());
         context.setFill(circleShape.getColor());
         context.fillRoundRect(circleShape.getX(), circleShape.getY(), circleShape.getSize(), circleShape.getSize(), circleShape.getSize(), circleShape.getSize());
     }
