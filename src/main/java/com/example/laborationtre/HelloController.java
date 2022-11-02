@@ -70,12 +70,14 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
 
     @FXML
     protected void onCanvasPress(MouseEvent mouseEvent) {
+        double x = mouseEvent.getX();
+        double y = mouseEvent.getY();
 
 
         if (editTool.isSelected()) {
-            shapesModel.tryEditShape(mouseEvent);
+            shapesModel.tryEditShape(x,y);
         } else {
-            shapesModel.createShape(mouseEvent);
+            shapesModel.createShape(x,y);
         }
     }
     public void updateCanvas() {

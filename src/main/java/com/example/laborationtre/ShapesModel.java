@@ -18,17 +18,12 @@ public class ShapesModel {
     ObjectProperty<Color> color = new SimpleObjectProperty<>(Color.BLACK);
     ObjectProperty<ToolOption> tool = new SimpleObjectProperty<>();
 
-
     ObservableList<MyShape> shapeStack = FXCollections.observableArrayList();
     ObservableList<MyShape> redoShapeStack = FXCollections.observableArrayList();
 
 
-
-
     public double x;
     public double y;
-
-
 
 
     public void addToStack(MyShape shape) {
@@ -36,9 +31,7 @@ public class ShapesModel {
         shapeStack.add(shape);
     }
 
-    public void createShape(MouseEvent mouseEvent) {
-        double x = mouseEvent.getX();
-        double y = mouseEvent.getY();
+    public void createShape(double x, double y) {
         switch (tool.getValue()) {
             case LINE -> createLineStart(x, y);
             case CIRCLE -> createCircle(x,y);
@@ -63,9 +56,7 @@ public class ShapesModel {
         addToStack(new MyCircle(x - (size.get().doubleValue() / 2), y - (size.get().doubleValue() / 2), size.get().doubleValue(), color.getValue()));
     }
 
-    public void tryEditShape(MouseEvent mouseEvent) {
-        double x = mouseEvent.getX();
-        double y = mouseEvent.getY();
+    public void tryEditShape(double x, double y) {
         for (int i = 0; i < shapeStack.size(); i++) {
             MyShape shape = shapeStack.get(i);
             if (shape.compareShapeAndMouseEvent(shape, x ,y)) {
