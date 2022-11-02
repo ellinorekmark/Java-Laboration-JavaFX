@@ -7,9 +7,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+
 import java.io.IOException;
 import java.nio.file.Files;
-
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 
 public class ShapesModel {
@@ -21,22 +25,31 @@ public class ShapesModel {
     ObservableList<MyShape> shapeStack = FXCollections.observableArrayList();
     ObservableList<MyShape> redoShapeStack = FXCollections.observableArrayList();
 
+    Deque<Command> undoStack = new ArrayDeque<>();
+    Deque<Command> redoStack = new ArrayDeque<>();
+    SendAndRecieve snr = new SendAndRecieve();
+
 
     public double x;
     public double y;
 
 
     public void addToStack(MyShape shape) {
+        //undoStack.add(()->shapeStack.remove(shapeStack.get(shapeStack.size()-1)));
 
+        undoStack.add(()->shapeStack.remove(shape));
         shapeStack.add(shape);
+        MyShape test = snr.recieveShape(shape.networkString());
+        shapeStack.add(test);
     }
 
     public void createShape(double x, double y) {
         switch (tool.getValue()) {
             case LINE -> createLineStart(x, y);
-            case CIRCLE -> createCircle(x,y);
-            case SQUARE -> createSquare(x,y);
+            case CIRCLE -> createCircle(x, y);
+            case SQUARE -> createSquare(x, y);
         }
+
     }
 
     private void createSquare(double x, double y) {
@@ -59,12 +72,14 @@ public class ShapesModel {
     public void tryEditShape(double x, double y) {
         for (int i = 0; i < shapeStack.size(); i++) {
             MyShape shape = shapeStack.get(i);
-            if (shape.compareShapeAndMouseEvent(shape, x ,y)) {
+            if (shape.compareShapeAndMouseEvent(shape, x, y)) {
+                Color oldColor = shape.getColor();
+                double oldSize = shape.getSize();
+                undoStack.push(()->shape.editShape(shape, oldColor, oldSize));
                 shapeStack.set(i, shape.editShape(shape, color.get(), size.get().doubleValue()));
             }
         }
     }
-
 
 
     public void saveToFile(java.nio.file.Path file) {
@@ -86,25 +101,25 @@ public class ShapesModel {
 
 
     public enum ToolOption {
-        LINE{
+        LINE {
             @Override
             public String toString() {
                 return "Line";
             }
         },
-        FREEDRAW{
+        FREEDRAW {
             @Override
             public String toString() {
                 return "Free Draw";
             }
         },
-        CIRCLE{
+        CIRCLE {
             @Override
             public String toString() {
                 return "Circle";
             }
         },
-        SQUARE{
+        SQUARE {
             @Override
             public String toString() {
                 return "Square";

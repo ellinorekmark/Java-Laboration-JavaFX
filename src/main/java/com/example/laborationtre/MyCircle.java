@@ -38,7 +38,14 @@ public class MyCircle extends MyShape{
 
     @Override
     public String toSVG() {
+        System.out.println(toHexString(getColor()));
         return "<circle cx=\""+getX()+"\" cy=\""+getY()+"\" r=\""+getSize()/2+"\" fill=\""+toHexString(getColor())+"\"/>";
+
+    }
+
+    @Override
+    public String networkString() {
+        return ""+getClass().getSimpleName()+"\""+getX()+"\""+getY()+"\""+getSize()+"\""+getColor().getRed()+"\""+getColor().getGreen()+"\""+getColor().getBlue();
     }
 
 }

@@ -20,6 +20,11 @@ public class Line extends MyShape {
     }
 
     @Override
+    public String networkString() {
+        return null;
+    }
+
+    @Override
     public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
         Line lineShape = (Line) shape;
         double rightEdge;

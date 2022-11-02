@@ -73,7 +73,6 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
         double x = mouseEvent.getX();
         double y = mouseEvent.getY();
 
-
         if (editTool.isSelected()) {
             shapesModel.tryEditShape(x,y);
         } else {
@@ -99,8 +98,15 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
     @FXML
     void undoCanvas() {
         if (!shapesModel.shapeStack.isEmpty()) {
-            shapesModel.redoShapeStack.add(shapesModel.shapeStack.get(shapesModel.shapeStack.size()-1));
-            shapesModel.shapeStack.remove(shapesModel.shapeStack.size()-1);
+//            shapesModel.redoShapeStack.add(shapesModel.shapeStack.get(shapesModel.shapeStack.size()-1));
+//            shapesModel.shapeStack.remove(shapesModel.shapeStack.size()-1);
+
+            Command undo = shapesModel.undoStack.pop();
+
+
+            undo.execute();
+            updateCanvas();
+
         }
     }
     @FXML

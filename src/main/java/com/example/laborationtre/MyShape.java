@@ -64,4 +64,17 @@ abstract public class MyShape extends Shape {
     }
 
 
+    @Override
+    public Object clone() {
+        try {
+            return (MyShape) super.clone();
+        } catch (CloneNotSupportedException ignored) {
+
+        }
+        return null;
+    }
+
+abstract public String networkString();
+
+
 }
