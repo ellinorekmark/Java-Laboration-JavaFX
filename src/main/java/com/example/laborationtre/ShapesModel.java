@@ -7,13 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+
 
 
 public class ShapesModel {
@@ -22,12 +18,10 @@ public class ShapesModel {
     ObjectProperty<Color> color = new SimpleObjectProperty<>(Color.BLACK);
     ObjectProperty<ToolOption> tool = new SimpleObjectProperty<>();
 
-    ObservableList<MyShape> shapeStack = FXCollections.observableArrayList();
-    ObservableList<MyShape> redoShapeStack = FXCollections.observableArrayList();
+    ObservableList<MyShape> shapeList = FXCollections.observableArrayList();
+    ObservableList<Command> memoryList = FXCollections.observableArrayList();
+    ObservableList<Command> reverseList = FXCollections.observableArrayList();
 
-    Deque<Command> undoStack = new ArrayDeque<>();
-    Deque<Command> redoStack = new ArrayDeque<>();
-    SendAndRecieve snr = new SendAndRecieve();
 
 
     public double x;
@@ -35,12 +29,9 @@ public class ShapesModel {
 
 
     public void addToStack(MyShape shape) {
-        //undoStack.add(()->shapeStack.remove(shapeStack.get(shapeStack.size()-1)));
-
-        undoStack.add(()->shapeStack.remove(shape));
-        shapeStack.add(shape);
-        MyShape test = snr.recieveShape(shape.networkString());
-        shapeStack.add(test);
+        memoryList.add(()-> shapeList.add(shape));
+        reverseList.add(()-> shapeList.remove(shape));
+        shapeList.add(shape);
     }
 
     public void createShape(double x, double y) {
@@ -70,23 +61,34 @@ public class ShapesModel {
     }
 
     public void tryEditShape(double x, double y) {
-        for (int i = 0; i < shapeStack.size(); i++) {
-            MyShape shape = shapeStack.get(i);
-            if (shape.compareShapeAndMouseEvent(shape, x, y)) {
-                Color oldColor = shape.getColor();
+        for (MyShape shape : shapeList) {
+            if (shape.compare(x, y)) {
                 double oldSize = shape.getSize();
-                undoStack.push(()->shape.editShape(shape, oldColor, oldSize));
-                shapeStack.set(i, shape.editShape(shape, color.get(), size.get().doubleValue()));
+                double newSize = size.get().doubleValue();
+                Color oldColor = shape.getColor();
+                Color newColor = color.get();
+
+                memoryList.add(()->editShape(shape, newColor, newSize));
+                reverseList.add(()->editShape(shape,oldColor,oldSize));
+                editShape(shape, newColor, newSize);
+
             }
         }
+    }
+
+    public void editShape(MyShape shape, Color color, double size){
+        shape.setColor(color);
+        shape.setSize(size);
     }
 
 
     public void saveToFile(java.nio.file.Path file) {
 
-        StringBuilder string = new StringBuilder("<?xml version=\"1.0\" standalone=\"no\"?>\n" +
-                "<svg width=\"500\" height=\"500\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n");
-        for (MyShape shape : shapeStack) {
+        StringBuilder string = new StringBuilder("""
+                <?xml version="1.0" standalone="no"?>
+                <svg width="500" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                """);
+        for (MyShape shape : shapeList) {
             string.append(shape.toSVG()).append("\n");
         }
         string.append("</svg>");
@@ -107,12 +109,7 @@ public class ShapesModel {
                 return "Line";
             }
         },
-        FREEDRAW {
-            @Override
-            public String toString() {
-                return "Free Draw";
-            }
-        },
+
         CIRCLE {
             @Override
             public String toString() {

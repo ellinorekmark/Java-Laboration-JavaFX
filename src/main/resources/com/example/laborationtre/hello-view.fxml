@@ -66,6 +66,6 @@
        </GridPane>
    </top>
    <center>
-      <Canvas fx:id="canvas" height="500.0" onMouseDragged="#onCanvasDrag" onMousePressed="#onCanvasPress" onMouseReleased="#onCanvasRelease" width="500.0" BorderPane.alignment="CENTER" />
+      <Canvas fx:id="canvas" height="500.0"  onMousePressed="#onCanvasPress" onMouseReleased="#onCanvasRelease" width="500.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

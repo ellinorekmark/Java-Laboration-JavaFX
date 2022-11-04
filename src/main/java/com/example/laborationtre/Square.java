@@ -1,7 +1,6 @@
 package com.example.laborationtre;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class Square extends MyShape {
@@ -16,29 +15,20 @@ public class Square extends MyShape {
     }
 
     @Override
-    public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
-        Square squareShape = (Square) shape;
-            double startX = squareShape.getX();
-            double endX = squareShape.getX()+squareShape.getSize();
-            double startY = squareShape.getY();
-            double endY = squareShape.getY()+squareShape.getSize();
+    public boolean compare(double x, double y) {
+
+            double startX = getX();
+            double endX = getX()+getSize();
+            double startY = getY();
+            double endY = getY()+getSize();
             return x < endX && x > startX && y < endY && y > startY;
 
     }
 
     @Override
-    public void draw(GraphicsContext context, MyShape shape) {
-        Square squareShape = (Square) shape;
-        context.setFill(squareShape.getColor());
-        context.fillRect(squareShape.getX(), squareShape.getY(), squareShape.getSize(), squareShape.getSize());
-    }
-
-    @Override
-    public MyShape editShape(MyShape shape, Color color, double size) {
-        Square mySquare = (Square)shape;
-        mySquare.setColor(color);
-        mySquare.setSize(size);
-        return mySquare;
+    public void draw(GraphicsContext context) {
+        context.setFill(getColor());
+        context.fillRect(getX(), getY(), getSize(), getSize());
     }
 
     @Override

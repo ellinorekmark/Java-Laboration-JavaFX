@@ -1,7 +1,6 @@
 package com.example.laborationtre;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
@@ -20,11 +19,10 @@ abstract public class MyShape extends Shape {
     }
 
 
-    abstract public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y);
-    abstract public void draw(GraphicsContext context, MyShape shape);
+    abstract public boolean compare(double x, double y);
+    abstract public void draw(GraphicsContext context);
 
 
-    abstract public MyShape editShape(MyShape shape, Color color,double size);
     abstract public String toSVG();
 
     public double getX() {
@@ -64,15 +62,7 @@ abstract public class MyShape extends Shape {
     }
 
 
-    @Override
-    public Object clone() {
-        try {
-            return (MyShape) super.clone();
-        } catch (CloneNotSupportedException ignored) {
 
-        }
-        return null;
-    }
 
 abstract public String networkString();
 

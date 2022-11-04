@@ -1,33 +1,19 @@
 package com.example.laborationtre;
 
 
-
 import javafx.beans.binding.Bindings;
-
-import javafx.beans.property.ListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-
 import javafx.fxml.FXML;
-
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-
 import javafx.scene.input.MouseEvent;
-
-import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-
 import java.io.File;
-
-
-
 import static com.example.laborationtre.ShapesModel.*;
-
 
 
 public class HelloController {
@@ -48,24 +34,22 @@ public class HelloController {
     public ToggleButton editTool;
     public Label pixelSizeInfo;
 
-ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList(ToolOption.values());
-
-
+    ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList(ToolOption.values());
 
 
     public void initialize() {
         context = canvas.getGraphicsContext2D();
-        saveButton.disableProperty().bind(Bindings.isEmpty(shapesModel.shapeStack));
+        saveButton.disableProperty().bind(Bindings.isEmpty(shapesModel.shapeList));
         colorChoice.valueProperty().bindBidirectional(shapesModel.color);
         pixelSlider.valueProperty().bindBidirectional(shapesModel.size);
         toolsList.valueProperty().bindBidirectional(shapesModel.tool);
         toolsList.disableProperty().bind(editTool.selectedProperty());
-        shapesModel.shapeStack.addListener((ListChangeListener<MyShape>) c -> updateCanvas()) ;
+        //shapesModel.shapeStack.addListener((ListChangeListener<MyShape>) c -> updateCanvas());
+        shapesModel.memoryList.addListener((ListChangeListener<Command>) c -> updateCanvas());
         toolsList.setItems(toolsDropDownList);
         toolsList.setValue(ToolOption.CIRCLE);
 
     }
-
 
 
     @FXML
@@ -74,20 +58,20 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
         double y = mouseEvent.getY();
 
         if (editTool.isSelected()) {
-            shapesModel.tryEditShape(x,y);
+            shapesModel.tryEditShape(x, y);
         } else {
-            shapesModel.createShape(x,y);
+            shapesModel.createShape(x, y);
         }
+
     }
+
     public void updateCanvas() {
         context.clearRect(0, 0, 500, 500);
-        for (MyShape shape : shapesModel.shapeStack) {
-            shape.draw(context, shape);
+        for (MyShape shape : shapesModel.shapeList) {
+            shape.draw(context);
         }
     }
 
-    public void onCanvasDrag(MouseEvent mouseEvent) {
-    }
 
     public void onCanvasRelease(MouseEvent mouseEvent) {
         if (shapesModel.tool.getValue().equals(ToolOption.LINE)) {
@@ -97,30 +81,31 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
 
     @FXML
     void undoCanvas() {
-        if (!shapesModel.shapeStack.isEmpty()) {
-//            shapesModel.redoShapeStack.add(shapesModel.shapeStack.get(shapesModel.shapeStack.size()-1));
-//            shapesModel.shapeStack.remove(shapesModel.shapeStack.size()-1);
-
-            Command undo = shapesModel.undoStack.pop();
-
-
-            undo.execute();
-            updateCanvas();
-
+        if (!shapesModel.shapeList.isEmpty()) {
+            shapesModel.memoryList.add(shapesModel.reverseList.get(shapesModel.reverseList.size() - 1));
+            shapesModel.reverseList.remove(shapesModel.reverseList.size() - 1);
+            updateShapeList();
         }
     }
+
+    private void updateShapeList() {
+        shapesModel.shapeList.clear();
+        for (Command c : shapesModel.memoryList
+        ) {
+            c.execute();
+        }
+    }
+
     @FXML
     void redoCanvas() {
 
-        if (!shapesModel.redoShapeStack.isEmpty()) {
-            shapesModel.shapeStack.add(shapesModel.redoShapeStack.get(shapesModel.redoShapeStack.size()-1));
-            shapesModel.redoShapeStack.remove(shapesModel.redoShapeStack.size()-1);
-        }
+        shapesModel.reverseList.add(shapesModel.memoryList.get(shapesModel.memoryList.size() - 1));
+        shapesModel.memoryList.remove(shapesModel.memoryList.get(shapesModel.memoryList.size() - 1));
+        updateShapeList();
     }
 
     public void clearCanvas() {
-        shapesModel.shapeStack.clear();
-
+        shapesModel.shapeList.clear();
     }
 
     public void editToolActive() {
@@ -137,11 +122,11 @@ ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList
         fileChooser.setTitle("Save");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG","*.svg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
         fileChooser.setInitialFileName("MyMasterpiece");
         File filepath = fileChooser.showSaveDialog(stage);
 
-        if(filepath!=null) {
+        if (filepath != null) {
             java.nio.file.Path path = java.nio.file.Path.of(filepath.toURI());
             shapesModel.saveToFile(path);
         }

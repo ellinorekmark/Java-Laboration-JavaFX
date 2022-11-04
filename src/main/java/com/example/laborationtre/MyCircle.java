@@ -11,29 +11,25 @@ public class MyCircle extends MyShape{
 
 
     @Override
-    public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
-        MyCircle circleShape = (MyCircle) shape;
-        double startX = circleShape.getX()+circleShape.getSize();
-        double endX = circleShape.getX()-circleShape.getY();
-        double startY = circleShape.getY()+circleShape.getSize();
-        double endY = circleShape.getY()-circleShape.getSize();
-        return x > endX && x < startX && y > endY && y < startY;
+    public boolean compare(double x, double y) {
+        double startX = getX();
+        double endX = getX()+getSize();
+        double startY = getY();
+        double endY = getY()+getSize();
+
+        double centerX = getX()+(getSize()/2);
+        double centerY = getY()+(getSize()/2);
+        double radius = getSize()/2;
+
+
+        return x > startX && x < endX && y > startY && y < endY;
     }
 
     @Override
-    public void draw(GraphicsContext context, MyShape shape) {
-        MyCircle circleShape = (MyCircle) shape;
-        context.setFill(circleShape.getColor());
-        context.fillRoundRect(circleShape.getX(), circleShape.getY(), circleShape.getSize(), circleShape.getSize(), circleShape.getSize(), circleShape.getSize());
-    }
+    public void draw(GraphicsContext context) {
 
-    @Override
-    public MyShape editShape(MyShape shape, Color color, double size) {
-        MyCircle myCircle = (MyCircle)shape;
-        myCircle.setColor(color);
-        myCircle.setSize(size);
-        return myCircle;
-
+        context.setFill(getColor());
+        context.fillRoundRect(getX(), getY(), getSize(), getSize(), getSize(), getSize());
     }
 
     @Override

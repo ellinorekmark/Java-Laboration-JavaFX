@@ -16,26 +16,26 @@ class ShapesModelTest {
         shapesModel.size.set(30);
         shapesModel.tool.set(ShapesModel.ToolOption.SQUARE);
         shapesModel.createShape(30, 45);
-        assertNotNull(shapesModel.shapeStack);
-        assert (shapesModel.shapeStack.get(0).getClass().equals(Square.class));
+        assertNotNull(shapesModel.shapeList);
+        assert (shapesModel.shapeList.get(0).getClass().equals(Square.class));
 
     }
 
     @Test
     void testAddToStack() {
         shapesModel.addToStack(newCircle);
-        assertNotNull(shapesModel.shapeStack);
+        assertNotNull(shapesModel.shapeList);
 
     }
 
     @Test
     void testEdit() {
-        shapesModel.shapeStack.add(newCircle);
+        shapesModel.shapeList.add(newCircle);
         shapesModel.color.set(Color.BLACK);
-        assertFalse (shapesModel.shapeStack.isEmpty());
-        assert (shapesModel.shapeStack.get(0).getColor().equals(Color.AQUA));
+        assertFalse (shapesModel.shapeList.isEmpty());
+        assert (shapesModel.shapeList.get(0).getColor().equals(Color.AQUA));
         shapesModel.tryEditShape(32, 60);
-        assert (shapesModel.shapeStack.get(0).getColor().equals(Color.BLACK));
+        assert (shapesModel.shapeList.get(0).getColor().equals(Color.BLACK));
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.laborationtre;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class Line extends MyShape {
@@ -25,50 +24,43 @@ public class Line extends MyShape {
     }
 
     @Override
-    public boolean compareShapeAndMouseEvent(MyShape shape, double x, double y) {
-        Line lineShape = (Line) shape;
+    public boolean compare(double x, double y) {
+
         double rightEdge;
         double leftEdge;
         double top;
         double bottom;
 
-        if (lineShape.getX()-lineShape.getEndX()<0){
-            rightEdge = lineShape.getEndX();
-            leftEdge = lineShape.getX();
+        if (getX()-getEndX()<0){
+            rightEdge = getEndX();
+            leftEdge = getX();
         }
         else{
-            rightEdge = lineShape.getX();
-            leftEdge = lineShape.getEndX();
+            rightEdge = getX();
+            leftEdge = getEndX();
         }
 
-        if (lineShape.getY()-lineShape.getEndY()<0){
-            top = lineShape.getEndY();
-            bottom = lineShape.getY();
+        if (getY()-getEndY()<0){
+            top = getEndY();
+            bottom = getY();
         }
         else{
-            top = lineShape.getY();
-            bottom = lineShape.getEndY();
+            top = getY();
+            bottom = getEndY();
         }
+
         return x > leftEdge && x < rightEdge && y > bottom && y < top;
     }
 
     @Override
-    public void draw(GraphicsContext context, MyShape shape) {
+    public void draw(GraphicsContext context) {
         context.beginPath();
-        context.setStroke(((Line) shape).getColor());
-        context.setLineWidth(((Line) shape).getSize());
-        context.moveTo(((Line) shape).getX(), ((Line) shape).getY());
-        context.lineTo(((Line) shape).getEndX(), ((Line) shape).getEndY());
+        context.setStroke(getColor());
+        context.setLineWidth(getSize());
+        context.moveTo(getX(), getY());
+        context.lineTo(getEndX(), getEndY());
         context.closePath();
         context.stroke();
-    }
-
-    @Override
-    public MyShape editShape(MyShape shape, Color color, double size) {
-        Line myLine = (Line)shape;
-        myLine.setColor(color);
-        myLine.setSize(size);
-        return myLine;
     }
 
     public double getEndX() {
