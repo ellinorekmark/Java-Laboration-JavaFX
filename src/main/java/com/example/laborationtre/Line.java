@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 public class Line extends MyShape {
     double endX;
     double endY;
+
     public Line(double x, double y, double endX, double endY, double size, Color color) {
         super(x, y, size, color);
         this.endX = endX;
@@ -13,14 +14,20 @@ public class Line extends MyShape {
     }
 
 
-    public String toSVG(){
-        return "<line x1=\""+getX()+"\" y1=\""+getY()+"\" x2=\""+getEndX()+"\" y2=\""+getEndY()+"\" stroke=\""+toHexString(getColor())+"\" stroke-width=\""+getSize()+"\"/>";
+    public String toSVG() {
+        return "<line x1=\"" + getX() + "\" y1=\"" + getY() + "\" x2=\"" + getEndX() + "\" y2=\"" + getEndY() + "\" stroke=\"" + toHexString(getColor()) + "\" stroke-width=\"" + getSize() + "\"/>";
 
+    }
+
+    public MyShape copy(MyShape shape) {
+        Line line = (Line) shape;
+        return new Line(shape.getX(), shape.getY(), line.getEndX(), line.getEndY(), shape.getSize(), shape.getColor());
     }
 
     @Override
     public String networkString() {
-        return null;
+
+        return "" + getClass().getSimpleName() + "\"" + getX() + "\"" + getY() + "\"" + getSize() + "\"" + getColor().getRed() + "\"" + getColor().getGreen() + "\"" + getColor().getBlue()+"\""+getEndX()+"\""+getEndY()+"\"";
     }
 
     @Override
@@ -31,20 +38,18 @@ public class Line extends MyShape {
         double top;
         double bottom;
 
-        if (getX()-getEndX()<0){
+        if (getX() - getEndX() < 0) {
             rightEdge = getEndX();
             leftEdge = getX();
-        }
-        else{
+        } else {
             rightEdge = getX();
             leftEdge = getEndX();
         }
 
-        if (getY()-getEndY()<0){
+        if (getY() - getEndY() < 0) {
             top = getEndY();
             bottom = getY();
-        }
-        else{
+        } else {
             top = getY();
             bottom = getEndY();
         }
@@ -66,7 +71,6 @@ public class Line extends MyShape {
     public double getEndX() {
         return endX;
     }
-
 
 
     public double getEndY() {

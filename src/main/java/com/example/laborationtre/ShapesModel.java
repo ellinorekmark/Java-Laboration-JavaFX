@@ -29,9 +29,9 @@ public class ShapesModel {
 
 
     public void addToStack(MyShape shape) {
-        memoryList.add(()-> shapeList.add(shape));
-        reverseList.add(()-> shapeList.remove(shape));
         shapeList.add(shape);
+        memoryList.add(()-> shapeList.add(shape));
+        reverseList.clear();
     }
 
     public void createShape(double x, double y) {
@@ -61,25 +61,21 @@ public class ShapesModel {
     }
 
     public void tryEditShape(double x, double y) {
-        for (MyShape shape : shapeList) {
+        for (int i = 0; i < shapeList.size(); i++) {
+            MyShape shape = shapeList.get(i);
             if (shape.compare(x, y)) {
-                double oldSize = shape.getSize();
-                double newSize = size.get().doubleValue();
-                Color oldColor = shape.getColor();
-                Color newColor = color.get();
-
-                memoryList.add(()->editShape(shape, newColor, newSize));
-                reverseList.add(()->editShape(shape,oldColor,oldSize));
-                editShape(shape, newColor, newSize);
-
+                MyShape newShape = shape.copy(shape);
+                newShape.setSize(size.get().doubleValue());
+                newShape.setColor(color.get());
+                shapeList.set(i, newShape);
+                int finalI = i;
+                memoryList.add(() -> shapeList.set(finalI, newShape));
+                reverseList.clear();
             }
         }
     }
 
-    public void editShape(MyShape shape, Color color, double size){
-        shape.setColor(color);
-        shape.setSize(size);
-    }
+
 
 
     public void saveToFile(java.nio.file.Path file) {

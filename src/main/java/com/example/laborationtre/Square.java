@@ -8,7 +8,9 @@ public class Square extends MyShape {
         super(x, y, size, color);
     }
 
-
+    public MyShape copy(MyShape shape) {
+        return new Square(shape.getX(), shape.getY(), shape.getSize(), shape.getColor());
+    }
 
     public String toSVG(){
         return "<path d=\"M "+getX()+" "+getY()+" h "+getSize()+" v "+getSize()+" h "+(-getSize())+" Z\" fill=\""+toHexString(getColor())+"\" stroke=\"transparent\"/>";

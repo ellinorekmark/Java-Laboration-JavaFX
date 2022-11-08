@@ -6,8 +6,8 @@ import javafx.scene.shape.Shape;
 
 abstract public class MyShape extends Shape {
 
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
     private double size;
     private Color color;
 
@@ -18,8 +18,11 @@ abstract public class MyShape extends Shape {
         this.color = color;
     }
 
+    abstract public MyShape copy(MyShape shape);
+
 
     abstract public boolean compare(double x, double y);
+
     abstract public void draw(GraphicsContext context);
 
 
@@ -62,9 +65,7 @@ abstract public class MyShape extends Shape {
     }
 
 
-
-
-abstract public String networkString();
+    abstract public String networkString();
 
 
 }

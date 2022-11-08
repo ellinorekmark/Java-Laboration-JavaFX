@@ -44,7 +44,7 @@ public class HelloController {
         pixelSlider.valueProperty().bindBidirectional(shapesModel.size);
         toolsList.valueProperty().bindBidirectional(shapesModel.tool);
         toolsList.disableProperty().bind(editTool.selectedProperty());
-        //shapesModel.shapeStack.addListener((ListChangeListener<MyShape>) c -> updateCanvas());
+        shapesModel.shapeList.addListener((ListChangeListener<MyShape>) c -> updateCanvas());
         shapesModel.memoryList.addListener((ListChangeListener<Command>) c -> updateCanvas());
         toolsList.setItems(toolsDropDownList);
         toolsList.setValue(ToolOption.CIRCLE);
@@ -82,8 +82,8 @@ public class HelloController {
     @FXML
     void undoCanvas() {
         if (!shapesModel.shapeList.isEmpty()) {
-            shapesModel.memoryList.add(shapesModel.reverseList.get(shapesModel.reverseList.size() - 1));
-            shapesModel.reverseList.remove(shapesModel.reverseList.size() - 1);
+            shapesModel.reverseList.add(shapesModel.memoryList.get(shapesModel.memoryList.size()-1));
+            shapesModel.memoryList.remove(shapesModel.memoryList.get(shapesModel.memoryList.size()-1));
             updateShapeList();
         }
     }
@@ -98,14 +98,16 @@ public class HelloController {
 
     @FXML
     void redoCanvas() {
+            shapesModel.memoryList.add(shapesModel.reverseList.get(shapesModel.reverseList.size()-1));
+            shapesModel.reverseList.remove(shapesModel.reverseList.get(shapesModel.reverseList.size()-1));
+            updateShapeList();
 
-        shapesModel.reverseList.add(shapesModel.memoryList.get(shapesModel.memoryList.size() - 1));
-        shapesModel.memoryList.remove(shapesModel.memoryList.get(shapesModel.memoryList.size() - 1));
-        updateShapeList();
     }
 
     public void clearCanvas() {
         shapesModel.shapeList.clear();
+        shapesModel.memoryList.clear();
+        shapesModel.reverseList.clear();
     }
 
     public void editToolActive() {

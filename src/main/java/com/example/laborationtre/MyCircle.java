@@ -9,6 +9,11 @@ public class MyCircle extends MyShape{
         super(x, y, size, color);
     }
 
+    @Override
+    public MyShape copy(MyShape shape) {
+        return new MyCircle(shape.getX(), shape.getY(), shape.getSize(), shape.getColor());
+    }
+
 
     @Override
     public boolean compare(double x, double y) {
