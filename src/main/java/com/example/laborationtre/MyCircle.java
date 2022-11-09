@@ -14,20 +14,13 @@ public class MyCircle extends MyShape{
         return new MyCircle(shape.getX(), shape.getY(), shape.getSize(), shape.getColor());
     }
 
-
     @Override
     public boolean compare(double x, double y) {
-        double startX = getX();
-        double endX = getX()+getSize();
-        double startY = getY();
-        double endY = getY()+getSize();
-
         double centerX = getX()+(getSize()/2);
         double centerY = getY()+(getSize()/2);
         double radius = getSize()/2;
 
-
-        return x > startX && x < endX && y > startY && y < endY;
+        return !((((x-centerX)*(x-centerX)+(y-centerY)*(y-centerY))>(radius*radius)));
     }
 
     @Override
@@ -46,7 +39,7 @@ public class MyCircle extends MyShape{
 
     @Override
     public String networkString() {
-        return ""+getClass().getSimpleName()+"\""+getX()+"\""+getY()+"\""+getSize()+"\""+getColor().getRed()+"\""+getColor().getGreen()+"\""+getColor().getBlue();
+        return ""+getClass().getSimpleName()+"\""+getX()+"\""+getY()+"\""+getSize()+"\""+getColor().toString();
     }
 
 }

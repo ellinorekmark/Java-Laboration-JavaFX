@@ -35,7 +35,7 @@ public class Square extends MyShape {
 
     @Override
     public String networkString() {
-        return ""+getClass().getSimpleName()+"\""+getX()+"\""+getY()+"\""+getSize()+"\""+getColor().getRed()+"\""+getColor().getGreen()+"\""+getColor().getBlue();
+        return ""+getClass().getSimpleName()+"\""+getX()+"\""+getY()+"\""+getSize()+"\""+getColor().toString();
     }
 
 

@@ -27,7 +27,7 @@ public class Line extends MyShape {
     @Override
     public String networkString() {
 
-        return "" + getClass().getSimpleName() + "\"" + getX() + "\"" + getY() + "\"" + getSize() + "\"" + getColor().getRed() + "\"" + getColor().getGreen() + "\"" + getColor().getBlue()+"\""+getEndX()+"\""+getEndY()+"\"";
+        return "" + getClass().getSimpleName() + "\"" + getX() + "\"" + getY() + "\"" + getSize() + "\"" + getColor().toString()+"\""+getEndX()+"\""+getEndY()+"\"";
     }
 
     @Override

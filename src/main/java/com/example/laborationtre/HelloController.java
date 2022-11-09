@@ -18,6 +18,7 @@ import static com.example.laborationtre.ShapesModel.*;
 
 public class HelloController {
 
+    public CheckBox networkToggle;
     ShapesModel shapesModel = new ShapesModel();
 
     public Canvas canvas;
@@ -34,21 +35,25 @@ public class HelloController {
     public ToggleButton editTool;
     public Label pixelSizeInfo;
 
+
     ObservableList<ToolOption> toolsDropDownList = FXCollections.observableArrayList(ToolOption.values());
 
 
     public void initialize() {
         context = canvas.getGraphicsContext2D();
         saveButton.disableProperty().bind(Bindings.isEmpty(shapesModel.shapeList));
+        undoButton.disableProperty().bind(Bindings.isEmpty(shapesModel.shapeList));
+        redoButton.disableProperty().bind(Bindings.isEmpty(shapesModel.undoRedo.reverseList));
         colorChoice.valueProperty().bindBidirectional(shapesModel.color);
         pixelSlider.valueProperty().bindBidirectional(shapesModel.size);
         toolsList.valueProperty().bindBidirectional(shapesModel.tool);
         toolsList.disableProperty().bind(editTool.selectedProperty());
         shapesModel.shapeList.addListener((ListChangeListener<MyShape>) c -> updateCanvas());
-        shapesModel.memoryList.addListener((ListChangeListener<Command>) c -> updateCanvas());
+        shapesModel.undoRedo.memoryList.addListener((ListChangeListener<Command>) c -> updateCanvas());
         toolsList.setItems(toolsDropDownList);
         toolsList.setValue(ToolOption.CIRCLE);
-
+        networkToggle.selectedProperty().bindBidirectional(shapesModel.online);
+        networkToggle.disableProperty().bind(shapesModel.noNetwork);
     }
 
 
@@ -58,6 +63,7 @@ public class HelloController {
         double y = mouseEvent.getY();
 
         if (editTool.isSelected()) {
+
             shapesModel.tryEditShape(x, y);
         } else {
             shapesModel.createShape(x, y);
@@ -82,32 +88,22 @@ public class HelloController {
     @FXML
     void undoCanvas() {
         if (!shapesModel.shapeList.isEmpty()) {
-            shapesModel.reverseList.add(shapesModel.memoryList.get(shapesModel.memoryList.size()-1));
-            shapesModel.memoryList.remove(shapesModel.memoryList.get(shapesModel.memoryList.size()-1));
-            updateShapeList();
+            shapesModel.removeOne();
         }
     }
 
-    private void updateShapeList() {
-        shapesModel.shapeList.clear();
-        for (Command c : shapesModel.memoryList
-        ) {
-            c.execute();
-        }
-    }
+
 
     @FXML
     void redoCanvas() {
-            shapesModel.memoryList.add(shapesModel.reverseList.get(shapesModel.reverseList.size()-1));
-            shapesModel.reverseList.remove(shapesModel.reverseList.get(shapesModel.reverseList.size()-1));
-            updateShapeList();
+            shapesModel.redoOne();
 
     }
 
     public void clearCanvas() {
         shapesModel.shapeList.clear();
-        shapesModel.memoryList.clear();
-        shapesModel.reverseList.clear();
+        shapesModel.undoRedo.memoryList.clear();
+        shapesModel.undoRedo.reverseList.clear();
     }
 
     public void editToolActive() {
@@ -125,7 +121,7 @@ public class HelloController {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
-        fileChooser.setInitialFileName("MyMasterpiece");
+        fileChooser.setInitialFileName("untitled.svg");
         File filepath = fileChooser.showSaveDialog(stage);
 
         if (filepath != null) {

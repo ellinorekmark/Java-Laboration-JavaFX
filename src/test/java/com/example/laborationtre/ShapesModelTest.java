@@ -23,7 +23,7 @@ class ShapesModelTest {
 
     @Test
     void testAddToStack() {
-        shapesModel.addToStack(newCircle);
+        shapesModel.addShape(newCircle);
         assertNotNull(shapesModel.shapeList);
 
     }

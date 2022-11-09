@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.laborationtre.HelloController">
     <padding>
@@ -43,17 +41,7 @@
                <Label text="Size " />
                <Label fx:id="pixelSizeInfo" text="50 px" />
            </HBox>
-           <ChoiceBox fx:id="toolsList"  prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-<!--               <items>-->
-<!--                   <FXCollections  fx:id="toolDropDown" fx:factory="observableArrayList" >-->
-
-<!--&lt;!&ndash;                       <String fx:value="Line" />&ndash;&gt;-->
-<!--&lt;!&ndash;                       <String fx:value="Free Draw" />&ndash;&gt;-->
-<!--&lt;!&ndash;                       <String fx:value="Circle" />&ndash;&gt;-->
-<!--&lt;!&ndash;                       <String fx:value="Square" />&ndash;&gt;-->
-<!--                   </FXCollections>-->
-<!--               </items>-->
-           </ChoiceBox>
+           <ChoiceBox fx:id="toolsList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
            <ColorPicker fx:id="colorChoice" GridPane.columnIndex="2" GridPane.rowIndex="2" />
            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <Label text="Tool" />
@@ -63,9 +51,10 @@
          <ToggleButton fx:id="editTool" mnemonicParsing="false" onAction="#editToolActive" text="Edit" GridPane.columnIndex="2" GridPane.rowIndex="1">
              <tooltip><Tooltip text="Click on a shape to change to current color and pixel choice." /></tooltip>
          </ToggleButton>
+         <CheckBox fx:id="networkToggle" mnemonicParsing="false" text="Over Network" GridPane.columnIndex="2" />
        </GridPane>
    </top>
    <center>
-      <Canvas fx:id="canvas" height="500.0"  onMousePressed="#onCanvasPress" onMouseReleased="#onCanvasRelease" width="500.0" BorderPane.alignment="CENTER" />
+      <Canvas fx:id="canvas" height="500.0" onMousePressed="#onCanvasPress" onMouseReleased="#onCanvasRelease" width="500.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
