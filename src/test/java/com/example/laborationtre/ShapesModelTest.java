@@ -17,13 +17,13 @@ class ShapesModelTest {
         shapesModel.tool.set(ShapesModel.ToolOption.SQUARE);
         shapesModel.createShape(30, 45);
         assertNotNull(shapesModel.shapeList);
-        assert (shapesModel.shapeList.get(0).getClass().equals(Square.class));
+        assertEquals(Square.class,shapesModel.shapeList.get(0).getClass());
 
     }
 
     @Test
     void testAddToStack() {
-        shapesModel.addShape(newCircle);
+        shapesModel.addToLocalList(newCircle);
         assertNotNull(shapesModel.shapeList);
 
     }
@@ -33,9 +33,9 @@ class ShapesModelTest {
         shapesModel.shapeList.add(newCircle);
         shapesModel.color.set(Color.BLACK);
         assertFalse (shapesModel.shapeList.isEmpty());
-        assert (shapesModel.shapeList.get(0).getColor().equals(Color.AQUA));
+        assertEquals(Color.AQUA,shapesModel.shapeList.get(0).getColor());
         shapesModel.tryEditShape(32, 60);
-        assert (shapesModel.shapeList.get(0).getColor().equals(Color.BLACK));
+        assertEquals(Color.BLACK, shapesModel.shapeList.get(0).getColor());
     }
 
 }

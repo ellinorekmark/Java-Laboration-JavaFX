@@ -111,7 +111,7 @@ public class ShapesModel {
 
 
 
-    private void addToLocalList(MyShape shape) {
+    public void addToLocalList(MyShape shape) {
         shapeList.add(shape);
         undoRedo.memoryList.add(()-> shapeList.add(shape));
         undoRedo.reverseList.clear();
